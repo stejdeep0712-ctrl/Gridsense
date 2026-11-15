@@ -1,29 +1,29 @@
 from urllib.request import urlopen
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
-from services.energy_advisor import generate_energy_advice
-from fastapi.middleware.cors import CORSMiddleware
+from socket import timeout as SocketTimeout
+
+import csv
 import json
 import time
-
-from fastapi import Depends
-from sqlalchemy.orm import Session
-from fastapi.middleware.cors import CORSMiddleware
-
-from database.db import get_db, Base, engine
-from database.models import Feeder, AssessmentHistory
-import csv
-from pathlib import Path
-
 import joblib
 import numpy as np
 
-from fastapi import FastAPI, HTTPException
+from pathlib import Path
+
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from database.db import get_db, Base, engine
+from database.models import Feeder, AssessmentHistory
 
 from ml.advisory_predictor import generate_ai_advisory
 from services.connection_advisor import assess_connection
+from services.energy_advisor import generate_energy_advice
 
 
 # =========================================
@@ -33,9 +33,7 @@ from services.connection_advisor import assess_connection
 BASE_DIR = Path(__file__).resolve().parent
 
 FRONTEND_DIR = BASE_DIR / "frontend"
-
 DATA_DIR = BASE_DIR / "data" / "processed"
-
 MODEL_DIR = BASE_DIR / "models" / "saved"
 
 PQ_MODEL_FILE = MODEL_DIR / "pq_screening_model.joblib"
@@ -53,7 +51,16 @@ app = FastAPI(
     ),
     version="1.3.0"
 )
+
+
+# Initialize database tables
 Base.metadata.create_all(bind=engine)
+
+
+# =========================================
+# CORS CONFIGURATION
+# =========================================
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -66,12 +73,52 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# =========================================
+# WEATHER CACHE
+# =========================================
+
 LIVE_WEATHER_CACHE = {
     "data": None,
     "timestamp": 0
 }
 
+SOLAR_FORECAST_CACHE = {}
+
 WEATHER_CACHE_SECONDS = 600
+FORECAST_CACHE_SECONDS = 1800
+
+
+# =========================================
+# COMMON WEATHER REQUEST FUNCTION
+# =========================================
+
+def fetch_weather_data(url: str, timeout: int = 20):
+
+    try:
+        with urlopen(url, timeout=timeout) as response:
+            return json.loads(
+                response.read().decode("utf-8")
+            )
+
+    except HTTPError as error:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Weather service error: HTTP {error.code}"
+        )
+
+    except (URLError, TimeoutError, SocketTimeout, OSError) as error:
+        raise HTTPException(
+            status_code=502,
+            detail="Could not connect to the weather service."
+        )
+
+    except (ValueError, json.JSONDecodeError):
+        raise HTTPException(
+            status_code=502,
+            detail="Invalid response from the weather service."
+        )
+
 
 # =========================================
 # LIVE WEATHER AND SOLAR DATA
@@ -79,9 +126,12 @@ WEATHER_CACHE_SECONDS = 600
 
 @app.get("/live-data")
 def get_live_data():
-        if (
+
+    # Return cached data if it is still fresh
+    if (
         LIVE_WEATHER_CACHE["data"] is not None
-        and time.time() - LIVE_WEATHER_CACHE["timestamp"] < WEATHER_CACHE_SECONDS
+        and time.time() - LIVE_WEATHER_CACHE["timestamp"]
+        < WEATHER_CACHE_SECONDS
     ):
         return LIVE_WEATHER_CACHE["data"]
 
@@ -108,69 +158,47 @@ def get_live_data():
         + urlencode(params)
     )
 
-    try:
-        with urlopen(url, timeout=15) as response:
-            data = json.loads(response.read().decode("utf-8"))
+    data = fetch_weather_data(url)
 
-        current = data.get("current", {})
-        units = data.get("current_units", {})
+    current = data.get("current", {})
+    units = data.get("current_units", {})
 
-        if not current:
-            raise HTTPException(
-                status_code=502,
-                detail="Live weather data is unavailable."
+    if not current:
+        raise HTTPException(
+            status_code=502,
+            detail="Live weather data is unavailable."
+        )
+
+    result = {
+        "source": "Open-Meteo",
+        "location": "Ludhiana, Punjab, India",
+        "coordinates": {
+            "latitude": latitude,
+            "longitude": longitude
+        },
+        "timestamp": current.get("time"),
+        "weather": {
+            "temperature": current.get("temperature_2m"),
+            "temperature_unit": units.get("temperature_2m"),
+            "humidity": current.get("relative_humidity_2m"),
+            "humidity_unit": units.get("relative_humidity_2m"),
+            "feels_like": current.get("apparent_temperature"),
+            "precipitation": current.get("precipitation"),
+            "cloud_cover": current.get("cloud_cover"),
+            "wind_speed": current.get("wind_speed_10m"),
+            "solar_radiation": current.get("shortwave_radiation"),
+            "solar_radiation_unit": units.get(
+                "shortwave_radiation"
             )
-
-               result = {
-    "source": "Open-Meteo",
-    "location": "Ludhiana, Punjab, India",
-    "coordinates": {
-        "latitude": latitude,
-        "longitude": longitude
-    },
-    "timestamp": current.get("time"),
-    "weather": {
-        "temperature": current.get("temperature_2m"),
-        "temperature_unit": units.get("temperature_2m"),
-        "humidity": current.get("relative_humidity_2m"),
-        "humidity_unit": units.get("relative_humidity_2m"),
-        "feels_like": current.get("apparent_temperature"),
-        "precipitation": current.get("precipitation"),
-        "cloud_cover": current.get("cloud_cover"),
-        "wind_speed": current.get("wind_speed_10m"),
-        "solar_radiation": current.get("shortwave_radiation"),
-        "solar_radiation_unit": units.get("shortwave_radiation")
+        }
     }
-}
 
-        LIVE_WEATHER_CACHE["data"] = result
-        LIVE_WEATHER_CACHE["timestamp"] = time.time()
+    LIVE_WEATHER_CACHE["data"] = result
+    LIVE_WEATHER_CACHE["timestamp"] = time.time()
 
-        return result
-
-    except HTTPException:
-        raise
-    except HTTPException:
-        raise
-
-    except (HTTPError, URLError, TimeoutError, OSError) as error:
-        raise HTTPException(
-            status_code=502,
-            detail=f"Weather service error: {str(error)}"
-        )
-
-    except (ValueError, json.JSONDecodeError) as error:
-        raise HTTPException(
-            status_code=502,
-            detail="Invalid response from the live weather service."
-        )
+    return result
 
 
-
-  
-        
-        
-        
 # =========================================
 # 24-HOUR SOLAR GENERATION FORECAST
 # =========================================
@@ -183,6 +211,18 @@ def get_solar_forecast(capacity_kw: float = 10.0):
             status_code=400,
             detail="Solar capacity must be between 0 and 1000 kW."
         )
+
+    cache_key = round(capacity_kw, 2)
+
+    # Return cached forecast
+    cached = SOLAR_FORECAST_CACHE.get(cache_key)
+
+    if (
+        cached
+        and time.time() - cached["timestamp"]
+        < FORECAST_CACHE_SECONDS
+    ):
+        return cached["data"]
 
     latitude = 30.9010
     longitude = 75.8573
@@ -206,91 +246,80 @@ def get_solar_forecast(capacity_kw: float = 10.0):
         + urlencode(params)
     )
 
-    try:
-        with urlopen(url, timeout=20) as response:
-            data = json.loads(
-                response.read().decode("utf-8")
-            )
+    data = fetch_weather_data(url, timeout=25)
 
-        hourly = data.get("hourly", {})
+    hourly = data.get("hourly", {})
 
-        times = hourly.get("time", [])
-        radiation = hourly.get("shortwave_radiation", [])
-        temperatures = hourly.get("temperature_2m", [])
-        clouds = hourly.get("cloud_cover", [])
+    times = hourly.get("time", [])
+    radiation = hourly.get("shortwave_radiation", [])
+    temperatures = hourly.get("temperature_2m", [])
+    clouds = hourly.get("cloud_cover", [])
 
-        if not times or len(times) != 24:
+    if not times or len(times) != 24:
+        raise HTTPException(
+            status_code=502,
+            detail="Incomplete 24-hour forecast received."
+        )
+
+    forecasts = []
+    total_energy = 0.0
+
+    for i in range(len(times)):
+
+        irradiance = radiation[i]
+
+        if irradiance is None:
             raise HTTPException(
                 status_code=502,
-                detail="Incomplete 24-hour forecast received."
+                detail="Missing solar radiation forecast."
             )
 
-        forecasts = []
-        total_energy = 0.0
+        irradiance = max(0.0, float(irradiance))
 
-        for i in range(len(times)):
+        hourly_energy = (
+            capacity_kw
+            * (irradiance / 1000.0)
+            * performance_ratio
+        )
 
-            irradiance = radiation[i]
+        total_energy += hourly_energy
 
-            if irradiance is None:
-                raise HTTPException(
-                    status_code=502,
-                    detail="Missing solar radiation forecast."
-                )
-
-            irradiance = max(0.0, float(irradiance))
-
-            hourly_energy = (
-                capacity_kw
-                * (irradiance / 1000.0)
-                * performance_ratio
+        forecasts.append({
+            "time": times[i],
+            "solar_radiation_w_m2": irradiance,
+            "temperature_c": temperatures[i],
+            "cloud_cover_percent": clouds[i],
+            "estimated_generation_kwh": round(
+                hourly_energy, 3
             )
+        })
 
-            total_energy += hourly_energy
+    result = {
+        "location": "Ludhiana, Punjab, India",
+        "capacity_kw": capacity_kw,
+        "performance_ratio": performance_ratio,
+        "forecast_period_hours": len(forecasts),
+        "estimated_total_energy_kwh": round(
+            total_energy, 2
+        ),
+        "forecast": forecasts,
+        "method": "Weather-based PV generation estimate",
+        "limitations": [
+            "Uses horizontal shortwave radiation as a solar-resource proxy.",
+            "Panel tilt, orientation and shading are not modelled.",
+            "Performance ratio is an assumed value.",
+            "Forecast is not actual measured solar generation."
+        ]
+    }
 
-            forecasts.append({
-                "time": times[i],
-                "solar_radiation_w_m2": irradiance,
-                "temperature_c": temperatures[i],
-                "cloud_cover_percent": clouds[i],
-                "estimated_generation_kwh": round(
-                    hourly_energy, 3
-                )
-            })
+    SOLAR_FORECAST_CACHE[cache_key] = {
+        "data": result,
+        "timestamp": time.time()
+    }
 
-        return {
-            "location": "Ludhiana, Punjab, India",
-            "capacity_kw": capacity_kw,
-            "performance_ratio": performance_ratio,
-            "forecast_period_hours": len(forecasts),
-            "estimated_total_energy_kwh": round(
-                total_energy, 2
-            ),
-            "forecast": forecasts,
-            "method": "Weather-based PV generation estimate",
-            "limitations": [
-                "Uses horizontal shortwave radiation as a solar-resource proxy.",
-                "Panel tilt, orientation and shading are not modelled.",
-                "Performance ratio is an assumed value.",
-                "Forecast is not actual measured solar generation."
-            ]
-        }
+    return result
 
-    except HTTPException:
-        raise
 
-    except (HTTPError, URLError, TimeoutError, OSError) as error:
-        raise HTTPException(
-            status_code=502,
-            detail=f"Weather service error: {str(error)}"
-        )
-
-    except (ValueError, json.JSONDecodeError) as error:
-        raise HTTPException(
-            status_code=502,
-            detail="Invalid response from the live weather service."
-        )
-        
 # =========================================
 # HISTORICAL SOLAR PERFORMANCE ANALYTICS
 # =========================================
@@ -331,116 +360,94 @@ def get_solar_analytics(
         + urlencode(params)
     )
 
-    try:
+    data = fetch_weather_data(url, timeout=30)
 
-        with urlopen(url, timeout=30) as response:
-            data = json.loads(
-                response.read().decode("utf-8")
-            )
+    daily = data.get("daily", {})
 
-        daily = data.get("daily", {})
+    dates = daily.get("time", [])
+    radiation_values = daily.get(
+        "shortwave_radiation_sum", []
+    )
 
-        dates = daily.get("time", [])
-        radiation_values = daily.get(
-            "shortwave_radiation_sum", []
+    if not dates or len(dates) != len(radiation_values):
+        raise HTTPException(
+            status_code=502,
+            detail="Historical solar data is incomplete."
         )
 
-        if not dates or len(dates) != len(radiation_values):
-            raise HTTPException(
-                status_code=502,
-                detail="Historical solar data is incomplete."
-            )
+    monthly_energy = {
+        month: 0.0 for month in range(1, 13)
+    }
 
-        monthly_energy = {
-            month: 0.0
-            for month in range(1, 13)
-        }
+    monthly_days = {
+        month: 0 for month in range(1, 13)
+    }
 
-        monthly_days = {
-            month: 0
-            for month in range(1, 13)
-        }
+    total_energy = 0.0
 
-        total_energy = 0.0
+    for date, radiation in zip(dates, radiation_values):
 
-        for date, radiation in zip(dates, radiation_values):
+        if radiation is None:
+            continue
 
-            if radiation is None:
-                continue
+        month = int(date[5:7])
+        radiation_mj = max(0.0, float(radiation))
 
-            month = int(date[5:7])
+        daily_energy = (
+            capacity_kw
+            * (radiation_mj / 3.6)
+            * performance_ratio
+        )
 
-            radiation_mj = max(0.0, float(radiation))
+        monthly_energy[month] += daily_energy
+        monthly_days[month] += 1
+        total_energy += daily_energy
 
-            daily_energy = (
-                capacity_kw
-                * (radiation_mj / 3.6)
-                * performance_ratio
-            )
+    month_names = [
+        "January", "February", "March",
+        "April", "May", "June",
+        "July", "August", "September",
+        "October", "November", "December"
+    ]
 
-            monthly_energy[month] += daily_energy
-            monthly_days[month] += 1
-            total_energy += daily_energy
+    monthly_results = []
 
-        month_names = [
-            "January", "February", "March",
-            "April", "May", "June",
-            "July", "August", "September",
-            "October", "November", "December"
+    for month in range(1, 13):
+
+        energy = monthly_energy[month]
+        days = monthly_days[month]
+
+        monthly_results.append({
+            "month": month_names[month - 1],
+            "estimated_energy_kwh": round(energy, 2),
+            "average_daily_energy_kwh": round(
+                energy / days, 2
+            ) if days else 0,
+            "days_available": days
+        })
+
+    return {
+        "location": "Ludhiana, Punjab, India",
+        "historical_year": year,
+        "capacity_kw": capacity_kw,
+        "performance_ratio": performance_ratio,
+        "estimated_annual_energy_kwh": round(
+            total_energy, 2
+        ),
+        "monthly_analytics": monthly_results,
+        "data_source": "Open-Meteo Historical Weather API",
+        "method": "Historical radiation-based PV estimate",
+        "limitations": [
+            "Uses historical horizontal solar radiation.",
+            "Panel tilt, orientation and shading are not modelled.",
+            "Performance ratio is an assumed value.",
+            "This is estimated energy, not actual meter data.",
+            "Historical weather does not guarantee future generation."
         ]
+    }
 
-        monthly_results = []
 
-        for month in range(1, 13):
-
-            energy = monthly_energy[month]
-            days = monthly_days[month]
-
-            monthly_results.append({
-                "month": month_names[month - 1],
-                "estimated_energy_kwh": round(energy, 2),
-                "average_daily_energy_kwh": round(
-                    energy / days, 2
-                ) if days else 0,
-                "days_available": days
-            })
-
-        return {
-            "location": "Ludhiana, Punjab, India",
-            "historical_year": year,
-            "capacity_kw": capacity_kw,
-            "performance_ratio": performance_ratio,
-            "estimated_annual_energy_kwh": round(
-                total_energy, 2
-            ),
-            "monthly_analytics": monthly_results,
-            "data_source": "Open-Meteo Historical Weather API",
-            "method": "Historical radiation-based PV estimate",
-            "limitations": [
-                "Uses historical horizontal solar radiation.",
-                "Panel tilt, orientation and shading are not modelled.",
-                "Performance ratio is an assumed value.",
-                "This is estimated energy, not actual meter data.",
-                "Historical weather does not guarantee future generation."
-            ]
-        }
-
-    except HTTPException:
-        raise
-
-    except (HTTPError, URLError, TimeoutError, OSError):
-        raise HTTPException(
-            status_code=502,
-            detail="Could not retrieve historical solar data."
-        )
-
-    except (ValueError, KeyError, TypeError):
-        raise HTTPException(
-            status_code=502,
-            detail="Invalid historical solar data response."
-        )
-        
-        # =========================================
+# =========================================
 # ENERGY ADVISOR REQUEST
 # =========================================
 
@@ -459,12 +466,8 @@ class EnergyAdvisorRequest(BaseModel):
     )
 
 
-
-        
-        
-        
 # =========================================
-# AI ENERGY ADVISOR API
+# ENERGY ADVISOR API
 # =========================================
 
 @app.post("/energy-advisor")
@@ -472,15 +475,12 @@ def energy_advisor(request: EnergyAdvisorRequest):
 
     try:
 
-        # Fetch current weather data
         weather_response = get_live_data()
 
-        # Fetch 24-hour solar forecast
         forecast_response = get_solar_forecast(
             capacity_kw=request.capacity_kw
         )
 
-        # Generate recommendations
         result = generate_energy_advice(
             weather=weather_response.get("weather", {}),
             solar_forecast=forecast_response,
@@ -504,10 +504,6 @@ def energy_advisor(request: EnergyAdvisorRequest):
             status_code=500,
             detail="Energy advisory failed: " + str(error)
         )
-
-
-
-
 
 
 # =========================================
@@ -575,6 +571,45 @@ class SolarConnectionRequest(BaseModel):
 
 
 # =========================================
+# HISTORY SAVING HELPER
+# =========================================
+
+def save_history_record(
+    db: Session,
+    feeder_code: str,
+    assessment_type: str,
+    status: str,
+    input_data: dict,
+    result_data: dict
+):
+
+    try:
+
+        feeder = db.query(Feeder).filter(
+            Feeder.feeder_id == feeder_code
+        ).first()
+
+        record = AssessmentHistory(
+            feeder_id=feeder.id if feeder else None,
+            feeder_code=feeder_code,
+            assessment_type=assessment_type,
+            status=status,
+            input_data=json.dumps(input_data),
+            result_data=json.dumps(result_data)
+        )
+
+        db.add(record)
+        db.commit()
+        db.refresh(record)
+
+        return record.id
+
+    except Exception:
+        db.rollback()
+        raise
+
+
+# =========================================
 # SOLAR CONNECTION ASSESSMENT
 # =========================================
 
@@ -583,7 +618,9 @@ def connection_assessment(
     request: SolarConnectionRequest,
     db: Session = Depends(get_db)
 ):
+
     try:
+
         result = assess_connection(
             request.requested_solar_kw
         )
@@ -635,13 +672,9 @@ def get_hosting_results():
     )
 
     if not results_file.exists():
-
         raise HTTPException(
             status_code=404,
-            detail=(
-                "Run the integrated hosting "
-                "assessment first."
-            )
+            detail="Run the integrated hosting assessment first."
         )
 
     with open(
@@ -652,7 +685,6 @@ def get_hosting_results():
     ) as file:
 
         reader = csv.DictReader(file)
-
         results = list(reader)
 
     return {
@@ -685,13 +717,14 @@ class AIAdvisoryRequest(BaseModel):
 # AI HOSTING CAPACITY ADVISORY
 # =========================================
 
-
 @app.post("/ai-advisory")
 def ai_advisory(
     request: AIAdvisoryRequest,
     db: Session = Depends(get_db)
 ):
+
     try:
+
         result = generate_ai_advisory(
             peak_load_kw=request.peak_load_kw,
             line_length_km=request.line_length_km,
@@ -737,15 +770,13 @@ def ai_advisory(
         )
 
 
-
 # =========================================
-# LOAD PQ MODEL BUNDLE
+# LOAD PQ MODEL
 # =========================================
 
 def load_pq_model():
 
     if not PQ_MODEL_FILE.exists():
-
         raise HTTPException(
             status_code=503,
             detail=(
@@ -758,15 +789,10 @@ def load_pq_model():
 
         bundle = joblib.load(PQ_MODEL_FILE)
 
-        required_keys = [
-            "model",
-            "features"
-        ]
+        required_keys = ["model", "features"]
 
         for key in required_keys:
-
             if key not in bundle:
-
                 raise ValueError(
                     f"PQ model bundle missing: {key}"
                 )
@@ -777,13 +803,9 @@ def load_pq_model():
         raise
 
     except Exception as error:
-
         raise HTTPException(
             status_code=500,
-            detail=(
-                "Unable to load PQ model: "
-                + str(error)
-            )
+            detail="Unable to load PQ model: " + str(error)
         )
 
 
@@ -800,43 +822,20 @@ def pq_model_info():
         "model_type": (
             "Simulated VUF threshold-exceedance classifier"
         ),
-
         "features": bundle.get("features", []),
-
-        "screening_threshold_percent": (
-            bundle.get(
-                "screening_threshold_percent",
-                2.0
-            )
+        "screening_threshold_percent": bundle.get(
+            "screening_threshold_percent", 2.0
         ),
-
-        "decision_threshold": (
-            bundle.get(
-                "decision_threshold",
-                0.5
-            )
+        "decision_threshold": bundle.get(
+            "decision_threshold", 0.5
         ),
-
-        "validation_method": (
-            bundle.get("validation_method")
-        ),
-
+        "validation_method": bundle.get("validation_method"),
         "evaluation": bundle.get("evaluation", {}),
-
-        "fold_results": bundle.get(
-            "fold_results",
-            []
-        ),
-
+        "fold_results": bundle.get("fold_results", []),
         "threshold_analysis": bundle.get(
-            "threshold_analysis",
-            []
+            "threshold_analysis", []
         ),
-
-        "limitations": bundle.get(
-            "limitations",
-            []
-        )
+        "limitations": bundle.get("limitations", [])
     }
 
 
@@ -852,15 +851,11 @@ class PQScreeningRequest(BaseModel):
     )
 
     line_length_km: float = Field(gt=0, le=100)
-
     line_r1: float = Field(gt=0, le=100)
-
     line_x1: float = Field(gt=0, le=100)
 
     phase_a_load_kw: float = Field(ge=0, le=10000)
-
     phase_b_load_kw: float = Field(ge=0, le=10000)
-
     phase_c_load_kw: float = Field(ge=0, le=10000)
 
 
@@ -886,10 +881,8 @@ class AssessmentHistoryRequest(BaseModel):
     )
 
     input_data: dict
-
     result_data: dict
-    
-    
+
 
 # =========================================
 # MULTI-CONFIGURATION PQ SCREENING
@@ -903,206 +896,124 @@ def pq_screening(
 
     try:
 
-        # Load latest trained model
-
         model_bundle = load_pq_model()
 
         model = model_bundle["model"]
-
         features = model_bundle["features"]
 
-        # Read saved decision threshold
-
         decision_threshold = float(
-            model_bundle.get(
-                "decision_threshold",
-                0.5
-            )
+            model_bundle.get("decision_threshold", 0.5)
         )
 
         if not 0 < decision_threshold < 1:
-
             raise ValueError(
                 "Invalid saved decision threshold."
             )
 
-        # Input parameters
-
         input_values = {
-
             "line_length_km": request.line_length_km,
-
             "line_r1": request.line_r1,
-
             "line_x1": request.line_x1,
-
             "phase_a_load_kw": request.phase_a_load_kw,
-
             "phase_b_load_kw": request.phase_b_load_kw,
-
             "phase_c_load_kw": request.phase_c_load_kw
-
         }
 
-        # Verify model features
-
         missing_features = [
-            feature
-            for feature in features
+            feature for feature in features
             if feature not in input_values
         ]
 
         if missing_features:
-
             raise ValueError(
                 f"Missing model features: {missing_features}"
             )
 
-        # Prepare model input
-
         input_data = np.array(
-            [
-                [
-                    input_values[feature]
-                    for feature in features
-                ]
-            ],
+            [[input_values[feature] for feature in features]],
             dtype=float
         )
 
         if not np.isfinite(input_data).all():
+            raise ValueError("Invalid numerical input.")
 
+        if 1 not in list(model.classes_):
             raise ValueError(
-                "Invalid numerical input."
+                "PQ model does not contain class 1."
             )
 
-        # Obtain class 1 score
+        class_1_index = list(model.classes_).index(1)
 
-        class_1_index = list(
-            model.classes_
-        ).index(1)
-
-        probabilities = model.predict_proba(
-            input_data
-        )[0]
+        probabilities = model.predict_proba(input_data)[0]
 
         class_1_score = float(
             probabilities[class_1_index]
         )
 
-        # Apply saved decision threshold
-
         predicted_class = int(
             class_1_score >= decision_threshold
         )
 
-        # Screening status
-
         if predicted_class == 1:
 
-            status = (
-                "VUF_LIMIT_EXCEEDANCE_SCREENED"
-            )
-
-            class_label = (
-                "VUF limit exceeded"
-            )
+            status = "VUF_LIMIT_EXCEEDANCE_SCREENED"
+            class_label = "VUF limit exceeded"
 
             message = (
-                "The model flags this scenario as a "
-                "possible simulated VUF screening-limit "
-                "exceedance. Further engineering analysis "
-                "is required."
+                "The model flags this scenario as a possible "
+                "simulated VUF screening-limit exceedance. "
+                "Further engineering analysis is required."
             )
 
         else:
 
-            status = (
-                "WITHIN_SIMULATED_VUF_LIMIT"
-            )
-
-            class_label = (
-                "Within VUF limit"
-            )
+            status = "WITHIN_SIMULATED_VUF_LIMIT"
+            class_label = "Within VUF limit"
 
             message = (
                 "The model predicts this scenario is within "
-                "the configured simulated VUF screening "
-                "limit. This is not an engineering approval."
+                "the configured simulated VUF screening limit. "
+                "This is not an engineering approval."
             )
 
-        # Return response
-
         response = {
-
             "feeder_id": request.feeder_id,
-
             "screening_status": status,
-
             "predicted_class": predicted_class,
-
             "class_label": class_label,
-
             "class_1_model_score_percent": round(
-                class_1_score * 100,
-                2
+                class_1_score * 100, 2
             ),
-
             "decision_threshold": decision_threshold,
-
             "input_parameters": input_values,
-
-            "screening_threshold_percent": (
-                model_bundle.get(
-                    "screening_threshold_percent",
-                    2.0
-                )
+            "screening_threshold_percent": model_bundle.get(
+                "screening_threshold_percent", 2.0
             ),
-
             "message": message,
-
             "model_type": (
                 "Multi-configuration simulated "
                 "VUF threshold-exceedance classifier"
             ),
-
-            "validation_method": (
-                model_bundle.get(
-                    "validation_method"
-                )
+            "validation_method": model_bundle.get(
+                "validation_method"
             ),
-
-            "evaluation": (
-                model_bundle.get(
-                    "evaluation",
-                    {}
-                )
-            ),
-
-            "limitations": (
-                model_bundle.get(
-                    "limitations",
-                    [
-                        "Model trained on simulated "
-                        "configurations of one demonstration "
-                        "network topology.",
-
-                        "Not validated on independently "
-                        "sourced real-world feeders.",
-
-                        "Not trained on historical PQ incidents.",
-
-                        "Model scores are not calibrated "
-                        "real-world probabilities.",
-
-                        "Physical power-quality measurements "
-                        "and engineer review are required."
-                    ]
-                )
+            "evaluation": model_bundle.get("evaluation", {}),
+            "limitations": model_bundle.get(
+                "limitations",
+                [
+                    "Model trained on simulated configurations "
+                    "of one demonstration network topology.",
+                    "Not validated on independently sourced "
+                    "real-world feeders.",
+                    "Not trained on historical PQ incidents.",
+                    "Model scores are not calibrated real-world "
+                    "probabilities.",
+                    "Physical power-quality measurements and "
+                    "engineer review are required."
+                ]
             )
-
         }
-        
+
         save_history_record(
             db=db,
             feeder_code=request.feeder_id,
@@ -1136,41 +1047,6 @@ def pq_screening(
         )
 
 
-
-
-
-def save_history_record(
-    db: Session,
-    feeder_code: str,
-    assessment_type: str,
-    status: str,
-    input_data: dict,
-    result_data: dict
-):
-    try:
-        feeder = db.query(Feeder).filter(
-            Feeder.feeder_id == feeder_code
-        ).first()
-
-        record = AssessmentHistory(
-            feeder_id=feeder.id if feeder else None,
-            feeder_code=feeder_code,
-            assessment_type=assessment_type,
-            status=status,
-            input_data=json.dumps(input_data),
-            result_data=json.dumps(result_data)
-        )
-
-        db.add(record)
-        db.commit()
-        db.refresh(record)
-
-        return record.id
-
-    except Exception:
-        db.rollback()
-        raise
-
 # =========================================
 # ASSESSMENT HISTORY API
 # =========================================
@@ -1180,7 +1056,9 @@ def save_assessment_history(
     request: AssessmentHistoryRequest,
     db: Session = Depends(get_db)
 ):
+
     try:
+
         feeder = db.query(Feeder).filter(
             Feeder.feeder_id == request.feeder_code
         ).first()
@@ -1209,6 +1087,7 @@ def save_assessment_history(
 
     except Exception:
         db.rollback()
+
         raise HTTPException(
             status_code=500,
             detail="Could not save assessment history."
@@ -1221,11 +1100,14 @@ def get_assessment_history(
     limit: int = 20,
     db: Session = Depends(get_db)
 ):
-       # Supports dashboard CSV export (up to 1,000 records)
+
     if skip < 0 or limit < 1 or limit > 1000:
         raise HTTPException(
             status_code=400,
-            detail="Pagination values must use skip >= 0 and limit between 1 and 1000."
+            detail=(
+                "Pagination values must use skip >= 0 "
+                "and limit between 1 and 1000."
+            )
         )
 
     records = (
@@ -1255,11 +1137,13 @@ def get_assessment_history(
         ]
     }
 
+
 @app.get("/assessment-history/{assessment_id}")
 def get_assessment_by_id(
     assessment_id: int,
     db: Session = Depends(get_db)
 ):
+
     record = db.query(AssessmentHistory).filter(
         AssessmentHistory.id == assessment_id
     ).first()
@@ -1280,6 +1164,7 @@ def get_assessment_by_id(
         "created_at": record.created_at
     }
 
+
 # =========================================
 # FRONTEND DASHBOARD
 # =========================================
@@ -1294,5 +1179,3 @@ if FRONTEND_DIR.exists():
         ),
         name="dashboard"
     )
-    
-    
