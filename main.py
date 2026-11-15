@@ -79,6 +79,11 @@ WEATHER_CACHE_SECONDS = 600
 
 @app.get("/live-data")
 def get_live_data():
+        if (
+        LIVE_WEATHER_CACHE["data"] is not None
+        and time.time() - LIVE_WEATHER_CACHE["timestamp"] < WEATHER_CACHE_SECONDS
+    ):
+        return LIVE_WEATHER_CACHE["data"]
 
     latitude = 30.9010
     longitude = 75.8573
