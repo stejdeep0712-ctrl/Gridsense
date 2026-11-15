@@ -9,7 +9,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
-from database.db import get_db
+from database.db import get_db, Base, engine
 from database.models import Feeder, AssessmentHistory
 import csv
 from pathlib import Path
