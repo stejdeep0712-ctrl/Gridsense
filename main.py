@@ -4,6 +4,7 @@ from urllib.error import URLError, HTTPError
 from services.energy_advisor import generate_energy_advice
 from fastapi.middleware.cors import CORSMiddleware
 import json
+import time
 
 from fastapi import Depends
 from sqlalchemy.orm import Session
