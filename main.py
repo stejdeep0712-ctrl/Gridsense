@@ -256,17 +256,16 @@ def get_solar_forecast(capacity_kw: float = 10.0):
         raise
 
     except (HTTPError, URLError, TimeoutError, OSError) as error:
-    raise HTTPException(
-        status_code=502,
-        detail=f"Weather service error: {str(error)}"
-    )
-
-    except (ValueError, KeyError, TypeError):
         raise HTTPException(
             status_code=502,
-            detail="Invalid solar forecast response."
+            detail=f"Weather service error: {str(error)}"
         )
-        
+
+    except (ValueError, json.JSONDecodeError) as error:
+        raise HTTPException(
+            status_code=502,
+            detail="Invalid response from the live weather service."
+        )
         
 # =========================================
 # HISTORICAL SOLAR PERFORMANCE ANALYTICS
