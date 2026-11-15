@@ -2,7 +2,7 @@ from urllib.request import urlopen
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
 from services.energy_advisor import generate_energy_advice
-
+from fastapi.middleware.cors import CORSMiddleware
 import json
 
 from fastapi import Depends
