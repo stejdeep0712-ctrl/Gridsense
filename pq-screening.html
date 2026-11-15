@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridSense | PQ Screening</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand"><div class="brand-icon">⚡</div><div><h2>GridSense</h2><p>POWER SYSTEMS ENGINEERING</p></div></div>
+        <div class="nav-label">MAIN MENU</div>
+        <nav>
+            <a href="index.html"><span>▦</span> Overview</a>
+            <a href="engineering.html"><span>⌁</span> Engineering Assessment</a>
+            <a href="ai-advisory.html"><span>✳</span> AI Advisory</a>
+            <a class="active" href="pq-screening.html"><span>◉</span> PQ Screening</a>
+            <a href="analytics.html"><span>▥</span> Analytics</a>
+        </nav>
+        <div class="sidebar-info"><div class="sidebar-info-icon">⌁</div><div><strong>Network Analysis</strong><p>Solar integration and grid performance</p></div></div>
+        <div class="sidebar-bottom"><div class="connection"><span class="status-dot"></span><span id="connectionStatus">Checking...</span></div><strong>GridSense <span>v1.3</span></strong><small>Engineering analysis suite</small></div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar"><div class="breadcrumb"><a href="index.html">Workspace</a><span>/</span><strong>PQ Screening</strong></div><div class="topbar-right"><div class="system-indicator"><span class="status-dot"></span> PQ MODULE</div><div class="profile-icon">GS</div></div></header>
+
+        <section class="welcome-section"><div><p class="eyebrow blue-eyebrow">THREE-PHASE NETWORK ANALYSIS</p><h1>Voltage Unbalance Screening</h1><p class="welcome-description">Screen simulated three-phase feeder conditions using the trained voltage-unbalance classifier.</p></div><div class="welcome-badge">◉ VUF Classifier</div></section>
+
+        <section class="panel module-panel">
+            <div class="metrics-panel" id="pqModelMetrics">
+                <div class="metrics-heading"><div><p class="eyebrow blue-eyebrow">MODEL PERFORMANCE</p><h3>Latest PQ Model Validation</h3></div><span class="validation-tag">LEAVE-ONE-FEEDER-OUT</span></div>
+                <p id="pqModelLoading">Loading saved model evaluation...</p>
+                <div class="result-grid" id="pqMetricCards"></div>
+                <div id="pqFeederValidation"></div>
+                <div id="pqThresholdAnalysis"></div>
+                <p class="chart-status" id="pqModelLimitations">Metrics describe out-of-fold performance on simulated configurations, not independently validated real-world feeders.</p>
+            </div>
+
+            <div class="section-heading"><div class="module-heading"><div class="module-icon blue">◉</div><div><p class="eyebrow blue-eyebrow">SCREENING INPUTS</p><h2>Feeder Configuration</h2><p class="module-description">Enter line parameters and three-phase load values.</p></div></div><span class="tag blue-tag">PQ CLASSIFIER</span></div>
+
+            <form id="pqForm">
+                <div class="form-grid">
+                    <div class="field"><label for="pqFeeder">Feeder Configuration</label><select id="pqFeeder" required><option value="FDR_SHORT">Short Feeder</option><option value="FDR_MEDIUM">Medium Feeder</option><option value="FDR_LONG">Long Feeder</option><option value="FDR_HIGH_IMPEDANCE">High Impedance Feeder</option></select></div>
+                    <div class="field"><label for="pqLineLength">Line Length (km)</label><input type="number" id="pqLineLength" min="0.001" step="any" value="0.2" required></div>
+                    <div class="field"><label for="pqR1">Line Resistance (r1)</label><input type="number" id="pqR1" min="0.001" step="any" value="0.05" required></div>
+                    <div class="field"><label for="pqX1">Line Reactance (x1)</label><input type="number" id="pqX1" min="0.001" step="any" value="0.04" required></div>
+                    <div class="field"><label for="pqPhaseA">Phase A Load (kW)</label><input type="number" id="pqPhaseA" min="0" step="any" value="50" required></div>
+                    <div class="field"><label for="pqPhaseB">Phase B Load (kW)</label><input type="number" id="pqPhaseB" min="0" step="any" value="10" required></div>
+                    <div class="field"><label for="pqPhaseC">Phase C Load (kW)</label><input type="number" id="pqPhaseC" min="0" step="any" value="5" required></div>
+                </div>
+                <button type="submit" class="pq-button">Run power-quality screening →</button>
+                <p id="pqError" class="error-message"></p>
+            </form>
+
+            <div id="pqResult" class="hidden">
+                <div class="result-divider"></div>
+                <div class="decision-card pq-decision-card"><span class="decision-label">PQ CLASSIFICATION</span><h2 id="pqStatus">-</h2><p id="pqMessage">-</p></div>
+                <div class="result-grid">
+                    <div class="result-item"><p>Predicted Class</p><h3 id="pqClass">-</h3></div>
+                    <div class="result-item"><p>Class 1 Model Score</p><h3 id="pqScore" class="pq-score">-</h3></div>
+                    <div class="result-item"><p>VUF Screening Threshold</p><h3 id="pqThreshold">-</h3></div>
+                    <div class="result-item"><p>Model Validation</p><h3 id="pqValidation">-</h3></div>
+                </div>
+                <div class="limitations"><h3>Important Limitations</h3><ul id="pqLimitations"></ul></div>
+            </div>
+        </section>
+
+        <footer><div class="footer-brand">⚡ GridSense</div><p>Voltage-unbalance screening based on simulated configurations.</p><p>This classifier is not a substitute for field power-quality measurements.</p></footer>
+    </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

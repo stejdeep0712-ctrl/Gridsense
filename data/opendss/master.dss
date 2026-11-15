@@ -1,0 +1,66 @@
+
+Clear
+
+! =========================================
+! THREE-PHASE DISTRIBUTION FEEDER
+! =========================================
+
+New Circuit.SimpleFeeder phases=3 bus1=SourceBus basekV=12.47 pu=1.0
+
+! =========================================
+! DISTRIBUTION TRANSFORMER
+! =========================================
+
+New Transformer.SubXf phases=3 windings=2 xhl=5
+
+~ wdg=1 bus=SourceBus conn=delta kv=12.47 kva=1000 %r=0.5
+
+~ wdg=2 bus=LoadBus conn=wye kv=0.48 kva=1000 %r=0.5
+
+! =========================================
+! DISTRIBUTION LINE
+! =========================================
+
+New Line.FeederLine phases=3
+~ bus1=LoadBus.1.2.3 bus2=EndBus.1.2.3
+~ length=0.2 units=km
+~ r1=0.05 x1=0.04
+~ r0=0.15 x0=0.12
+~ NormAmps=400 EmergAmps=500
+! =========================================
+! ELECTRICAL LOAD
+! =========================================
+
+New Load.FeederLoad phases=3
+
+~ bus1=EndBus.1.2.3 conn=wye
+
+~ kv=0.48 kw=300 pf=0.95
+
+! =========================================
+! SOLAR PV SYSTEM
+! =========================================
+
+New PVSystem.RooftopPV phases=3
+
+~ bus1=EndBus.1.2.3 conn=wye
+
+~ kv=0.48 kVA=600 pmpp=200
+
+~ pf=1 irradiance=1
+
+! =========================================
+! VOLTAGE BASES
+! =========================================
+
+Set VoltageBases=[12.47, 0.48]
+
+CalcVoltageBases
+
+! =========================================
+! POWER FLOW
+! =========================================
+
+Set mode=snapshot
+
+Solve

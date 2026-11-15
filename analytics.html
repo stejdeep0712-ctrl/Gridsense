@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridSense | Analytics</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand"><div class="brand-icon">⚡</div><div><h2>GridSense</h2><p>POWER SYSTEMS ENGINEERING</p></div></div>
+        <div class="nav-label">MAIN MENU</div>
+        <nav>
+            <a href="index.html"><span>▦</span> Overview</a>
+            <a href="engineering.html"><span>⌁</span> Engineering Assessment</a>
+            <a href="ai-advisory.html"><span>✳</span> AI Advisory</a>
+            <a href="pq-screening.html"><span>◉</span> PQ Screening</a>
+            <a class="active" href="analytics.html"><span>▥</span> Analytics</a>
+        </nav>
+        <div class="sidebar-info"><div class="sidebar-info-icon">⌁</div><div><strong>Network Analysis</strong><p>Solar integration and grid performance</p></div></div>
+        <div class="sidebar-bottom"><div class="connection"><span class="status-dot"></span><span id="connectionStatus">Checking...</span></div><strong>GridSense <span>v1.3</span></strong><small>Engineering analysis suite</small></div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar"><div class="breadcrumb"><a href="index.html">Workspace</a><span>/</span><strong>Analytics</strong></div><div class="topbar-right"><div class="system-indicator"><span class="status-dot"></span> ANALYTICS MODULE</div><div class="profile-icon">GS</div></div></header>
+
+        <section class="welcome-section"><div><p class="eyebrow">OPENDSS SIMULATION RESULTS</p><h1>Network Performance</h1><p class="welcome-description">Explore voltage response, transformer loading and line loading across the available OpenDSS solar scenarios.</p></div><div class="welcome-badge">▥ OpenDSS Analytics</div></section>
+
+        <section class="panel module-panel">
+            <div class="section-heading"><div class="module-heading"><div class="module-icon green">▥</div><div><p class="eyebrow">NETWORK PERFORMANCE</p><h2>Hosting Capacity Analysis</h2><p class="module-description">Simulation results from the configured feeder model.</p></div></div><span class="tag">OPENDSS DATA</span></div>
+
+            <div class="chart-grid">
+                <div class="chart-card"><div class="chart-title"><h3>Solar Capacity vs Voltage</h3><span>01</span></div><p>Minimum and maximum voltage response during solar penetration.</p><canvas id="voltageChart"></canvas></div>
+                <div class="chart-card"><div class="chart-title"><h3>Transformer Loading</h3><span>02</span></div><p>Transformer loading across solar scenarios.</p><canvas id="transformerChart"></canvas></div>
+                <div class="chart-card full-chart"><div class="chart-title"><h3>Line Loading</h3><span>03</span></div><p>Distribution line loading across solar scenarios.</p><canvas id="lineChart"></canvas></div>
+            </div>
+            <p id="chartStatus" class="chart-status">Loading simulation records...</p>
+        </section>
+
+<!-- =========================================
+     SOLAR PERFORMANCE ANALYTICS
+========================================= -->
+
+<section class="panel module-panel solar-analytics-panel">
+
+    <div class="section-heading">
+        <div class="module-heading">
+            <div class="module-icon green">☀</div>
+            <div>
+                <p class="eyebrow">RENEWABLE ENERGY ANALYTICS</p>
+                <h2>Solar Performance Analytics</h2>
+                <p class="module-description">
+                    Historical weather-based solar energy estimates
+                    for Ludhiana, Punjab.
+                </p>
+            </div>
+        </div>
+        <span class="tag">HISTORICAL DATA</span>
+    </div>
+
+    <!-- USER INPUTS -->
+
+    <div class="solar-analytics-controls">
+
+        <div>
+            <label for="analyticsCapacity">
+                Solar Installation Capacity
+            </label>
+            <select id="analyticsCapacity">
+                <option value="5">5 kW</option>
+                <option value="10" selected>10 kW</option>
+                <option value="25">25 kW</option>
+                <option value="50">50 kW</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="electricityTariff">
+                Electricity Tariff (₹ / kWh)
+            </label>
+            <input
+                type="number"
+                id="electricityTariff"
+                value="8"
+                min="0"
+                max="100"
+                step="0.5"
+            >
+        </div>
+
+<div>
+    <label for="solarInstallationCost">
+        Installation Cost (₹)
+    </label>
+
+    <input
+        type="number"
+        id="solarInstallationCost"
+        value="500000"
+        min="1"
+        step="10000"
+    >
+</div>
+
+
+        <button id="loadSolarAnalytics">
+            Generate Analytics
+        </button>
+
+    </div>
+
+    <p id="solarAnalyticsStatus">
+        Historical analytics not loaded yet.
+    </p>
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="solar-analytics-summary">
+
+        <article class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Annual Energy</span>
+                <span class="stat-icon green">⚡</span>
+            </div>
+            <h2 id="analyticsAnnualEnergy">-- kWh</h2>
+            <p>Estimated yearly production</p>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Average Monthly Energy</span>
+                <span class="stat-icon blue">▥</span>
+            </div>
+            <h2 id="analyticsMonthlyEnergy">-- kWh</h2>
+            <p>Average estimated production</p>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Estimated Annual Savings</span>
+                <span class="stat-icon green">₹</span>
+            </div>
+            <h2 id="analyticsAnnualSavings">₹ --</h2>
+            <p>Based on entered electricity tariff</p>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Installed Capacity</span>
+                <span class="stat-icon purple">☀</span>
+            </div>
+            <h2 id="analyticsInstalledCapacity">10 kW</h2>
+            <p>Selected solar installation</p>
+        </article>
+
+    </div>
+
+<article class="stat-card">
+    <div class="stat-top">
+        <span class="stat-label">Payback Period</span>
+        <span class="stat-icon orange">⌛</span>
+    </div>
+    <h2 id="solarPaybackPeriod">-- Years</h2>
+    <p>Estimated simple payback</p>
+</article>
+
+<article class="stat-card">
+    <div class="stat-top">
+        <span class="stat-label">5-Year Net Benefit</span>
+        <span class="stat-icon green">₹</span>
+    </div>
+    <h2 id="solarFiveYearBenefit">₹ --</h2>
+    <p>After initial installation cost</p>
+</article>
+
+<article class="stat-card">
+    <div class="stat-top">
+        <span class="stat-label">10-Year Net Benefit</span>
+        <span class="stat-icon green">₹</span>
+    </div>
+    <h2 id="solarTenYearBenefit">₹ --</h2>
+    <p>After initial installation cost</p>
+</article>
+
+
+    <!-- MONTHLY ENERGY CHART -->
+
+    <div class="chart-grid solar-analytics-charts">
+
+        <div class="chart-card full-chart">
+            <div class="chart-title">
+                <h3>Monthly Solar Energy Production</h3>
+                <span>04</span>
+            </div>
+            <p>Estimated monthly energy production in kWh.</p>
+            <canvas id="monthlySolarChart"></canvas>
+        </div>
+
+        <div class="chart-card full-chart">
+            <div class="chart-title">
+                <h3>Average Daily Solar Production</h3>
+                <span>05</span>
+            </div>
+            <p>Average estimated daily production for each month.</p>
+            <canvas id="dailySolarChart"></canvas>
+        </div>
+
+    </div>
+
+    <div class="overview-note">
+        <div class="overview-note-icon">ⓘ</div>
+        <div>
+            <strong>Estimation methodology</strong>
+            <p>
+                Energy production and savings are estimates based on
+                historical horizontal solar radiation, configured
+                system capacity and an assumed performance ratio.
+                Actual generation and savings depend on installation
+                conditions, electricity tariff and energy consumption.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+
+        <footer><div class="footer-brand">⚡ GridSense</div><p>Simulation analytics from the configured OpenDSS network.</p><p>Results depend on model assumptions and input parameters.</p></footer>
+    </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
