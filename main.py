@@ -255,11 +255,11 @@ def get_solar_forecast(capacity_kw: float = 10.0):
     except HTTPException:
         raise
 
-    except (HTTPError, URLError, TimeoutError, OSError):
-        raise HTTPException(
-            status_code=502,
-            detail="Unable to retrieve solar forecast data."
-        )
+    except (HTTPError, URLError, TimeoutError, OSError) as error:
+    raise HTTPException(
+        status_code=502,
+        detail=f"Weather service error: {str(error)}"
+    )
 
     except (ValueError, KeyError, TypeError):
         raise HTTPException(
