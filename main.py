@@ -121,27 +121,17 @@ def get_live_data():
                 detail="Live weather data is unavailable."
             )
 
-        return {
-            "source": "Open-Meteo",
-            "location": "Ludhiana, Punjab, India",
-            "coordinates": {
-                "latitude": latitude,
-                "longitude": longitude
-            },
-            "timestamp": current.get("time"),
-            "weather": {
-                "temperature": current.get("temperature_2m"),
-                "temperature_unit": units.get("temperature_2m"),
-                "humidity": current.get("relative_humidity_2m"),
-                "humidity_unit": units.get("relative_humidity_2m"),
-                "feels_like": current.get("apparent_temperature"),
-                "precipitation": current.get("precipitation"),
-                "cloud_cover": current.get("cloud_cover"),
-                "wind_speed": current.get("wind_speed_10m"),
-                "solar_radiation": current.get("shortwave_radiation"),
-                "solar_radiation_unit": units.get("shortwave_radiation")
-            }
+                result = {
+            # Keep all your existing weather response fields here
         }
+
+        LIVE_WEATHER_CACHE["data"] = result
+        LIVE_WEATHER_CACHE["timestamp"] = time.time()
+
+        return result
+
+    except HTTPException:
+        raise
     except HTTPException:
         raise
 
