@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://gridsense-4il3.onrender.com";
 
 const API = {
     solarAnalytics: `${API_BASE}/solar-analytics`,
