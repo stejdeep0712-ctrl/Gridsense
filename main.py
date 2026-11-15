@@ -66,6 +66,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+LIVE_WEATHER_CACHE = {
+    "data": None,
+    "timestamp": 0
+}
+
+WEATHER_CACHE_SECONDS = 600
+
 # =========================================
 # LIVE WEATHER AND SOLAR DATA
 # =========================================
