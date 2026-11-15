@@ -129,6 +129,20 @@ def get_live_data():
                 "solar_radiation_unit": units.get("shortwave_radiation")
             }
         }
+    except HTTPException:
+        raise
+
+    except (HTTPError, URLError, TimeoutError, OSError) as error:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Weather service error: {str(error)}"
+        )
+
+    except (ValueError, json.JSONDecodeError) as error:
+        raise HTTPException(
+            status_code=502,
+            detail="Invalid response from the live weather service."
+        )
 
 
 
