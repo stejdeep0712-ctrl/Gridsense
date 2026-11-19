@@ -1,3 +1,7 @@
+from database.db import engine, Base
+from database.models import Feeder, AssessmentHistory
+
+
 from urllib.request import urlopen
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
@@ -54,6 +58,7 @@ app = FastAPI(
     ),
     version="1.3.0"
 )
+Base.metadata.create_all(bind=engine)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
