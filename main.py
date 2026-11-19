@@ -1379,9 +1379,9 @@ def gridsense_chat(request: ChatRequest):
         raise
 
     except Exception as e:
-    print("GEMINI ERROR:", repr(e))
-    raise HTTPException(
-        status_code=502,
-        detail=f"Gemini error: {str(e)}"
-    )
+        print("GEMINI ERROR:", repr(e))
+        raise HTTPException(
+            status_code=502,
+            detail=f"Gemini error: {str(e)}"
+        )
  
