@@ -2,7 +2,9 @@ from urllib.request import urlopen
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
 from socket import timeout as SocketTimeout
-
+import os
+from google import genai
+from google.genai import types
 import csv
 import json
 import time
@@ -1179,3 +1181,109 @@ if FRONTEND_DIR.exists():
         ),
         name="dashboard"
     )
+    
+
+# =========================================
+# GRIDSENSE AI CHATBOT
+# =========================================
+
+class ChatMessage(BaseModel):
+    role: str
+    content: str = Field(min_length=1, max_length=2000)
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+    history: list[ChatMessage] = Field(default_factory=list, max_length=10)
+
+
+@app.post("/chat")
+def gridsense_chat(request: ChatRequest):
+
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise HTTPException(
+            status_code=503,
+            detail="AI assistant is not configured."
+        )
+
+    try:
+        client = genai.Client(api_key=api_key)
+
+        system_instruction = """
+        You are GridSense AI, an assistant for a renewable energy
+        hosting capacity and power quality advisory platform.
+
+        Help users understand:
+        - Renewable energy and solar PV systems
+        - Distribution network hosting capacity
+        - Voltage regulation and power quality
+        - Voltage unbalance factor (VUF)
+        - Electrical engineering assessments
+        - Solar generation and energy analysis
+
+        Give clear, professional and technically useful answers.
+
+        Never invent GridSense assessment results, measurements,
+        or live dashboard values. If data is not provided, say so.
+
+        Your advice is informational and does not replace
+        professional engineering verification or safety procedures.
+        """
+
+        contents = []
+
+        for item in request.history:
+            if item.role not in ("user", "model"):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid chat history role."
+                )
+
+            contents.append(
+                types.Content(
+                    role=item.role,
+                    parts=[
+                        types.Part.from_text(text=item.content)
+                    ]
+                )
+            )
+
+        contents.append(
+            types.Content(
+                role="user",
+                parts=[
+                    types.Part.from_text(text=request.message)
+                ]
+            )
+        )
+
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=contents,
+            config=types.GenerateContentConfig(
+                system_instruction=system_instruction,
+                temperature=0.5,
+                max_output_tokens=1000
+            )
+        )
+
+        answer = response.text
+
+        if not answer:
+            raise ValueError("Empty AI response")
+
+        return {
+            "reply": answer,
+            "assistant": "GridSense AI"
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception:
+        raise HTTPException(
+            status_code=502,
+            detail="AI assistant could not generate a response."
+        )
