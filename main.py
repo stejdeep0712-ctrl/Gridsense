@@ -75,6 +75,7 @@ app.add_middleware(
 # LIVE WEATHER AND SOLAR DATA
 # =========================================
 
+
 @app.get("/live-data")
 def get_live_data():
 
@@ -102,16 +103,29 @@ def get_live_data():
     )
 
     try:
-        with urlopen(url, timeout=15) as response:
+        request = Request(
+            url,
+            headers={"User-Agent": "GridSense/1.0"}
+        )
+
+        with urlopen(request, timeout=30) as response:
             data = json.loads(response.read().decode("utf-8"))
+
+        if data.get("error"):
+            print("OPEN-METEO API ERROR:", data.get("reason"))
+            raise HTTPException(
+                status_code=502,
+                detail="Weather API returned an error."
+            )
 
         current = data.get("current", {})
         units = data.get("current_units", {})
 
         if not current:
+            print("OPEN-METEO EMPTY RESPONSE:", data)
             raise HTTPException(
                 status_code=502,
-                detail="Live weather data is unavailable."
+                detail="Weather data is unavailable."
             )
 
         return {
@@ -139,17 +153,34 @@ def get_live_data():
     except HTTPException:
         raise
 
-    except (HTTPError, URLError, TimeoutError, OSError) as error:
+    except HTTPError as error:
+        print("WEATHER HTTP ERROR:", error.code, error.reason)
         raise HTTPException(
             status_code=502,
-            detail="Could not connect to the live weather service."
+            detail="Weather service returned an HTTP error."
         )
 
-    except (ValueError, json.JSONDecodeError) as error:
+    except URLError as error:
+        print("WEATHER URL ERROR:", repr(error.reason))
         raise HTTPException(
             status_code=502,
-            detail="Invalid response from the live weather service."
+            detail="Could not reach Open-Meteo."
         )
+
+    except TimeoutError as error:
+        print("WEATHER TIMEOUT:", repr(error))
+        raise HTTPException(
+            status_code=504,
+            detail="Weather service timed out."
+        )
+
+    except Exception as error:
+        print("WEATHER UNKNOWN ERROR:", repr(error))
+        raise HTTPException(
+            status_code=502,
+            detail="Unexpected weather service error."
+        )
+
         
         
         
