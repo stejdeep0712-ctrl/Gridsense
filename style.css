@@ -3085,4 +3085,25 @@ td {
         white-space: nowrap;
     }
 }
+/* GRIDSENSE - PROFESSIONAL CARD HOVER EFFECTS */
+
+.quick-card,
+.stat-card,
+.live-card,
+.study-card,
+.feature-card {
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+}
+
+.quick-card:hover,
+.stat-card:hover,
+.live-card:hover,
+.study-card:hover,
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(25, 65, 120, 0.12);
+    border-color: #93baf5;
+}
 
