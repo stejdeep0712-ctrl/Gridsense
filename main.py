@@ -1378,9 +1378,10 @@ def gridsense_chat(request: ChatRequest):
     except HTTPException:
         raise
 
-    except Exception:
-        raise HTTPException(
-            status_code=502,
-            detail="AI assistant could not generate a response."
-        )
+    except Exception as e:
+    print("GEMINI ERROR:", repr(e))
+    raise HTTPException(
+        status_code=502,
+        detail=f"Gemini error: {str(e)}"
+    )
  
