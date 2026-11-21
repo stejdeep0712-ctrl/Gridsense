@@ -544,7 +544,7 @@ def energy_advisor(request: EnergyAdvisorRequest):
 # =========================================
 # HOME AND HEALTH
 # =========================================
-app = FastAPI()
+
 @app.get("/")
 def home():
     return {
