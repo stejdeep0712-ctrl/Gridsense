@@ -1,5 +1,5 @@
 
-const API_BASE = "https://gridsense-backend.onrender.com";
+const API_BASE = "https://your-gridsense-backend.onrender.com";
 
 const API = {
     solarAnalytics: `${API_BASE}/solar-analytics`,
