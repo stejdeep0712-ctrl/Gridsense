@@ -2293,3 +2293,154 @@ footer p { margin: 4px 0 !important; color: #929287 !important; font-size: 9px !
 .chat-input-form input {
     flex: 1;
 }
+/* ==========================================
+   GRIDSENSE — PREMIUM TYPOGRAPHY UPDATE
+   TEXT STYLE AND COLOUR ONLY
+========================================== */
+
+/* Main font */
+body {
+    font-family: "Inter", "Segoe UI", sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Main headings */
+h1 {
+    color: #242820 !important;
+    font-weight: 800 !important;
+    letter-spacing: -1.4px !important;
+}
+
+h2 {
+    color: #30352b !important;
+    font-weight: 750 !important;
+    letter-spacing: -0.8px !important;
+}
+
+h3 {
+    color: #41463a !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.3px !important;
+}
+
+/* Paragraphs */
+p {
+    font-family: "Inter", "Segoe UI", sans-serif !important;
+    color: #777970;
+    line-height: 1.75 !important;
+    font-weight: 400;
+}
+
+/* Sidebar text */
+.sidebar nav a {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.2px !important;
+}
+
+.brand h2 {
+    font-size: 23px !important;
+    font-weight: 800 !important;
+    letter-spacing: -1px !important;
+}
+
+.brand p {
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+}
+
+/* Page headings */
+.welcome-section h1,
+.overview-hero h1 {
+    font-weight: 800 !important;
+    letter-spacing: -1.8px !important;
+    line-height: 1.15 !important;
+}
+
+/* Small section labels */
+.eyebrow,
+.nav-label,
+.section-caption {
+    font-weight: 800 !important;
+    letter-spacing: 1.8px !important;
+}
+
+/* Card headings */
+.stat-card h2 {
+    font-weight: 800 !important;
+    letter-spacing: -0.8px !important;
+}
+
+.quick-card h3,
+.chart-card h3,
+.insight-card h3 {
+    font-weight: 750 !important;
+    letter-spacing: -0.3px !important;
+}
+
+/* Form labels */
+label {
+    color: #4e5148 !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.2px !important;
+}
+
+/* Input text */
+input,
+select,
+textarea {
+    font-family: "Inter", "Segoe UI", sans-serif !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.1px !important;
+}
+
+/* Buttons */
+button,
+.btn,
+.overview-primary-action {
+    font-family: "Inter", "Segoe UI", sans-serif !important;
+    font-weight: 750 !important;
+    letter-spacing: 0.3px !important;
+}
+
+/* Important information */
+strong,
+b {
+    font-weight: 750 !important;
+}
+
+/* Result values */
+.result-item h3,
+.metric-card strong {
+    font-weight: 800 !important;
+    letter-spacing: -0.7px !important;
+}
+
+/* Descriptive text */
+.subtitle,
+.welcome-description,
+.module-description {
+    color: #777970 !important;
+    font-weight: 400 !important;
+    line-height: 1.8 !important;
+}
+
+/* Accent text */
+.eyebrow,
+.decision-label,
+.quick-arrow {
+    color: #c65b3b !important;
+}
+
+/* Footer typography */
+footer {
+    font-size: 11px !important;
+    letter-spacing: 0.2px !important;
+}
+
+footer p {
+    font-weight: 400 !important;
+}
