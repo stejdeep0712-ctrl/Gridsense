@@ -2444,3 +2444,117 @@ footer {
 footer p {
     font-weight: 400 !important;
 }
+/* ==========================================
+   GRIDSENSE - AUTO MULTICOLOUR THEME
+   Changes colour every 10 seconds
+========================================== */
+
+:root {
+    --theme-primary: #c65b3b;
+    --theme-secondary: #a8ad91;
+    --theme-background: #f1eee7;
+    --theme-sidebar: #242820;
+    --theme-card: #ffffff;
+    --theme-text: #242820;
+}
+
+/* Smooth colour transition */
+body,
+.sidebar,
+.card,
+button,
+input,
+select,
+textarea,
+h1, h2, h3,
+p,
+a,
+.nav-item {
+    transition:
+        background-color 1.5s ease,
+        color 1.5s ease,
+        border-color 1.5s ease,
+        box-shadow 1.5s ease;
+}
+
+/* Main theme colours */
+body {
+    background-color: var(--theme-background);
+    color: var(--theme-text);
+}
+
+.sidebar {
+    background-color: var(--theme-sidebar);
+}
+
+button,
+.primary-btn,
+.active,
+.nav-item.active {
+    background-color: var(--theme-primary);
+}
+
+.card {
+    background-color: var(--theme-card);
+}
+
+h1, h2, h3 {
+    color: var(--theme-text);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--theme-primary);
+    outline-color: var(--theme-primary);
+}
+
+/* Theme 1 - Orange */
+body.theme-orange {
+    --theme-primary: #e07842;
+    --theme-secondary: #f0b36b;
+    --theme-background: #fff5eb;
+    --theme-sidebar: #39251f;
+    --theme-card: #ffffff;
+    --theme-text: #39251f;
+}
+
+/* Theme 2 - Ocean Blue */
+body.theme-blue {
+    --theme-primary: #2878c8;
+    --theme-secondary: #69b7d9;
+    --theme-background: #edf6ff;
+    --theme-sidebar: #172c46;
+    --theme-card: #ffffff;
+    --theme-text: #172c46;
+}
+
+/* Theme 3 - Royal Purple */
+body.theme-purple {
+    --theme-primary: #8755c7;
+    --theme-secondary: #b69ae8;
+    --theme-background: #f5efff;
+    --theme-sidebar: #302044;
+    --theme-card: #ffffff;
+    --theme-text: #302044;
+}
+
+/* Theme 4 - Emerald Green */
+body.theme-green {
+    --theme-primary: #24966d;
+    --theme-secondary: #83c9a8;
+    --theme-background: #edf9f2;
+    --theme-sidebar: #19372c;
+    --theme-card: #ffffff;
+    --theme-text: #19372c;
+}
+
+/* Theme 5 - Rose Pink */
+body.theme-pink {
+    --theme-primary: #d65383;
+    --theme-secondary: #efa1bc;
+    --theme-background: #fff0f5;
+    --theme-sidebar: #452332;
+    --theme-card: #ffffff;
+    --theme-text: #452332;
+}
