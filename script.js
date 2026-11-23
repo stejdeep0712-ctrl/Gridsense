@@ -2149,6 +2149,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     changeTheme();
 
-    setInterval(changeTheme, 10000);
+    setInterval(changeTheme, 1000);
 
 });
