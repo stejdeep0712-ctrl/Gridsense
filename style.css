@@ -2558,3 +2558,36 @@ body.theme-pink {
     --theme-card: #ffffff;
     --theme-text: #452332;
 }
+/* ==========================================
+   GRIDSENSE - AUTOMATIC THEME CHANGER
+   Changes every 10 seconds
+========================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const themes = [
+        "theme-orange",
+        "theme-blue",
+        "theme-purple",
+        "theme-green",
+        "theme-pink"
+    ];
+
+    let currentTheme = 0;
+
+    function changeTheme() {
+
+        document.body.classList.remove(...themes);
+
+        document.body.classList.add(themes[currentTheme]);
+
+        currentTheme = (currentTheme + 1) % themes.length;
+    }
+
+    // Apply first theme immediately
+    changeTheme();
+
+    // Change theme every 10 seconds
+    setInterval(changeTheme, 10000);
+
+});
