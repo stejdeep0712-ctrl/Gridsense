@@ -2791,3 +2791,204 @@ body.theme-pink footer {
     border-color: var(--gs-line) !important;
     color: var(--gs-muted) !important;
 }
+
+/* =========================================
+   GRIDSENSE — PROFESSIONAL ENGINEERING UI
+   Final visual consistency override
+========================================= */
+
+:root {
+    --gs-bg: #f2f4f5 !important;
+    --gs-paper: #ffffff !important;
+    --gs-ink: #263746 !important;
+    --gs-muted: #71808b !important;
+    --gs-line: #dce2e6 !important;
+    --gs-dark: #263746 !important;
+    --gs-accent: #267c78 !important;
+    --gs-accent-soft: #e5f0ee !important;
+    --gs-sage: #718b82 !important;
+    --gs-shadow: 0 2px 8px rgba(30, 45, 55, 0.045) !important;
+}
+
+/* Consistent page background */
+html, body, .app, .main-content {
+    background: #f2f4f5 !important;
+    color: #263746 !important;
+    font-family: "Segoe UI", Arial, sans-serif !important;
+}
+
+/* Remove decorative visual effects */
+* {
+    text-shadow: none !important;
+}
+
+body {
+    background-image: none !important;
+}
+
+.gs-pointer {
+    display: none !important;
+}
+
+/* Sidebar */
+.sidebar {
+    background: #263746 !important;
+    box-shadow: none !important;
+    border-right: 1px solid #344957 !important;
+}
+
+.brand-icon {
+    background: #267c78 !important;
+    box-shadow: none !important;
+    border-radius: 9px !important;
+}
+
+.sidebar nav a {
+    border-radius: 7px !important;
+    transform: none !important;
+}
+
+.sidebar nav a.active {
+    background: #354e5b !important;
+    border: 1px solid #48616c !important;
+    box-shadow: inset 3px 0 #58aaa0 !important;
+}
+
+/* Main headings */
+.welcome-section h1,
+.overview-hero h1,
+.topbar h1 {
+    letter-spacing: -0.7px !important;
+    font-weight: 650 !important;
+}
+
+.eyebrow {
+    letter-spacing: 1px !important;
+    color: #267c78 !important;
+}
+
+/* Hero section */
+.overview-hero {
+    background: #263746 !important;
+    border: 1px solid #344957 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+
+.overview-hero::after {
+    display: none !important;
+}
+
+/* Cards and panels */
+.stat-card,
+.panel,
+.module-panel,
+.quick-card,
+.chart-card,
+.solar-chart-card,
+.insight-card,
+.result-item,
+.metrics-panel {
+    background: #ffffff !important;
+    border: 1px solid #dce2e6 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+}
+
+.stat-card::after {
+    display: none !important;
+}
+
+.stat-card:hover,
+.quick-card:hover,
+.chart-card:hover,
+.insight-card:hover,
+.module-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: #b8c9c9 !important;
+}
+
+/* Consistent data colours */
+.stat-card h2,
+.result-item h3,
+.result-card strong,
+.metric-card strong {
+    color: #267c78 !important;
+}
+
+/* Buttons */
+button,
+.btn,
+.overview-primary-action,
+input[type="submit"] {
+    background: #267c78 !important;
+    border: 1px solid #267c78 !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+    font-weight: 600 !important;
+    transform: none !important;
+}
+
+button:hover,
+.btn:hover,
+.overview-primary-action:hover {
+    background: #206963 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Form controls */
+input,
+select,
+textarea {
+    background: #ffffff !important;
+    color: #263746 !important;
+    border: 1px solid #cbd4da !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #267c78 !important;
+    box-shadow: 0 0 0 2px rgba(38,124,120,.10) !important;
+}
+
+/* Tags and icons */
+.tag,
+.validation-tag {
+    background: #e5f0ee !important;
+    color: #267c78 !important;
+    border: 1px solid #d0e3df !important;
+    border-radius: 5px !important;
+}
+
+/* Reduce excessive motion */
+button,
+a,
+.stat-card,
+.quick-card,
+.chart-card,
+.insight-card {
+    transition: background-color .15s ease,
+                border-color .15s ease !important;
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid #dce2e6 !important;
+    color: #71808b !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .overview-hero {
+        border-radius: 10px !important;
+    }
+
+    .sidebar {
+        box-shadow: none !important;
+    }
+}
