@@ -3564,3 +3564,398 @@ footer {
     }
 
 }
+
+/* ==========================================
+   GRIDSENSE - PQ SCREENING PROFESSIONAL THEME
+========================================== */
+
+.pq-screening-page {
+    background: #f2f4f5 !important;
+    color: #263746 !important;
+}
+
+.pq-screening-page .main-content {
+    background: #f2f4f5 !important;
+}
+
+/* PAGE INTRODUCTION */
+
+.pq-screening-page .welcome-section h1 {
+    color: #263746 !important;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.pq-screening-page .welcome-description {
+    color: #64727c !important;
+    line-height: 1.7;
+    max-width: 720px;
+}
+
+.pq-screening-page .welcome-badge {
+    background: #e5efee !important;
+    color: #267c78 !important;
+    border: 1px solid #cbdedb !important;
+    box-shadow: none !important;
+}
+
+.pq-screening-page .blue-eyebrow {
+    color: #267c78 !important;
+}
+
+/* PANELS */
+
+.pq-screening-page .panel {
+    background: #ffffff !important;
+    border: 1px solid #dce2e6 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    padding: 28px !important;
+    margin-bottom: 24px;
+}
+
+/* MODEL METRICS */
+
+.pq-screening-page .metrics-panel {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.pq-screening-page .metrics-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.pq-screening-page .metrics-heading h3 {
+    color: #263746 !important;
+    font-size: 19px;
+    font-weight: 650;
+    margin-top: 5px;
+}
+
+.pq-screening-page .validation-tag {
+    background: #edf4f3 !important;
+    color: #267c78 !important;
+    border: 1px solid #cbdedb !important;
+    border-radius: 5px;
+    padding: 7px 11px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.pq-screening-page #pqModelLoading {
+    color: #71808a !important;
+    font-size: 13px;
+}
+
+.pq-screening-page #pqFeederValidation,
+.pq-screening-page #pqThresholdAnalysis {
+    margin-top: 18px;
+    color: #52636e;
+    overflow-x: auto;
+}
+
+.pq-screening-page #pqFeederValidation table,
+.pq-screening-page #pqThresholdAnalysis table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+}
+
+.pq-screening-page #pqFeederValidation th,
+.pq-screening-page #pqFeederValidation td,
+.pq-screening-page #pqThresholdAnalysis th,
+.pq-screening-page #pqThresholdAnalysis td {
+    border: 1px solid #dce2e6;
+    padding: 11px 13px;
+    text-align: left;
+    font-size: 13px;
+}
+
+.pq-screening-page #pqFeederValidation th,
+.pq-screening-page #pqThresholdAnalysis th {
+    background: #edf2f4;
+    color: #344957;
+    font-weight: 650;
+}
+
+.pq-screening-page .chart-status {
+    color: #7b8992 !important;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid #e5e9ec;
+}
+
+/* SECTION HEADINGS */
+
+.pq-screening-page .section-heading {
+    border-bottom: 1px solid #e5e9ec;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+}
+
+.pq-screening-page .module-heading h2 {
+    color: #263746 !important;
+    font-size: 21px;
+    font-weight: 650;
+}
+
+.pq-screening-page .module-description {
+    color: #71808a !important;
+    line-height: 1.6;
+}
+
+.pq-screening-page .module-icon.blue {
+    background: #e5efee !important;
+    color: #267c78 !important;
+    border: 1px solid #cbdedb !important;
+}
+
+.pq-screening-page .blue-tag {
+    background: #e5efee !important;
+    color: #267c78 !important;
+    border: 1px solid #cbdedb !important;
+}
+
+/* INPUT INTRODUCTION */
+
+.pq-screening-page .pq-section-intro {
+    margin-bottom: 22px;
+}
+
+.pq-screening-page .pq-section-intro h3 {
+    color: #263746;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.pq-screening-page .pq-section-intro p {
+    color: #71808a;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* INPUT GROUPS */
+
+.pq-screening-page .pq-input-group {
+    background: #f8fafb;
+    border: 1px solid #e1e6e9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.pq-screening-page .pq-group-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e2e7ea;
+}
+
+.pq-screening-page .pq-group-number {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5efee;
+    color: #267c78;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.pq-screening-page .pq-group-heading h3 {
+    color: #263746;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.pq-screening-page .pq-group-heading p {
+    color: #82909a;
+    font-size: 12px;
+}
+
+/* FORM FIELDS */
+
+.pq-screening-page .field label {
+    color: #40515e !important;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.pq-screening-page .field input,
+.pq-screening-page .field select {
+    width: 100%;
+    min-height: 44px;
+    background: #ffffff !important;
+    color: #263746 !important;
+    border: 1px solid #cfd8de !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+.pq-screening-page .field input:focus,
+.pq-screening-page .field select:focus {
+    border-color: #267c78 !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(38,124,120,0.10) !important;
+}
+
+/* SUBMIT BUTTON */
+
+.pq-screening-page .pq-action-area {
+    margin-top: 24px;
+}
+
+.pq-screening-page .pq-button {
+    background: #267c78 !important;
+    color: #ffffff !important;
+    border: 1px solid #267c78 !important;
+    border-radius: 6px !important;
+    padding: 13px 22px;
+    font-weight: 600;
+    box-shadow: none !important;
+    transition: background 0.2s ease;
+}
+
+.pq-screening-page .pq-button:hover {
+    background: #1e6663 !important;
+}
+
+/* RESULTS */
+
+.pq-screening-page .pq-results-heading {
+    margin-bottom: 18px;
+}
+
+.pq-screening-page .pq-results-heading h3 {
+    color: #263746;
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.pq-screening-page .decision-card {
+    background: #edf4f3 !important;
+    border: 1px solid #cbdedb !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    padding: 22px !important;
+}
+
+.pq-screening-page .decision-label {
+    color: #267c78 !important;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+}
+
+.pq-screening-page .decision-card h2 {
+    color: #263746 !important;
+}
+
+.pq-screening-page .decision-card p {
+    color: #5f707a !important;
+    line-height: 1.6;
+}
+
+/* RESULT CARDS */
+
+.pq-screening-page .result-item {
+    background: #f7f9fa !important;
+    border: 1px solid #dce2e6 !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+    padding: 18px !important;
+}
+
+.pq-screening-page .result-item p {
+    color: #71808a !important;
+}
+
+.pq-screening-page .result-item h3 {
+    color: #263746 !important;
+    font-weight: 700;
+}
+
+/* LIMITATIONS */
+
+.pq-screening-page .limitations {
+    background: #f7f9fa !important;
+    border: 1px solid #dce2e6 !important;
+    border-radius: 7px !important;
+    padding: 20px !important;
+    margin-top: 18px;
+    box-shadow: none !important;
+}
+
+.pq-screening-page .limitations h3 {
+    color: #263746 !important;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.pq-screening-page .limitations li {
+    color: #5f707a !important;
+    line-height: 1.7;
+    margin-bottom: 6px;
+}
+
+.pq-screening-page .result-divider {
+    border-color: #e1e6e9 !important;
+}
+
+.pq-screening-page .error-message {
+    color: #b54747 !important;
+}
+
+/* FOOTER */
+
+.pq-screening-page footer {
+    border-top: 1px solid #dce2e6;
+    color: #7b8992 !important;
+    padding-top: 20px;
+}
+
+.pq-screening-page .footer-brand {
+    color: #267c78 !important;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .pq-screening-page .panel {
+        padding: 18px !important;
+    }
+
+    .pq-screening-page .pq-input-group {
+        padding: 15px;
+    }
+
+    .pq-screening-page .section-heading {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .pq-screening-page .pq-button {
+        width: 100%;
+    }
+
+    .pq-screening-page .validation-tag {
+        font-size: 9px;
+    }
+
+}
