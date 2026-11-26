@@ -3331,3 +3331,236 @@ footer {
         flex-direction: column;
     }
 }
+
+/* ==========================================
+   GRIDSENSE - AI ADVISORY PROFESSIONAL THEME
+========================================== */
+
+.ai-advisory-page {
+    background: #f2f4f5 !important;
+    color: #263746 !important;
+}
+
+.ai-advisory-page .main-content {
+    background: #f2f4f5 !important;
+}
+
+.ai-advisory-page .welcome-section {
+    margin-bottom: 24px;
+}
+
+.ai-advisory-page .welcome-section h1 {
+    color: #263746 !important;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.ai-advisory-page .welcome-description {
+    color: #64727c !important;
+    max-width: 720px;
+    line-height: 1.7;
+}
+
+.ai-advisory-page .welcome-badge {
+    background: #e5efee !important;
+    color: #267c78 !important;
+    border: 1px solid #cbdedb !important;
+    box-shadow: none !important;
+}
+
+.ai-advisory-page .panel {
+    background: #ffffff !important;
+    border: 1px solid #dce2e6 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    padding: 28px !important;
+    margin-bottom: 24px;
+}
+
+.ai-advisory-page .section-heading {
+    border-bottom: 1px solid #e5e9ec;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+}
+
+.ai-advisory-page .module-heading h2 {
+    color: #263746 !important;
+    font-size: 21px;
+    font-weight: 650;
+}
+
+.ai-advisory-page .module-description {
+    color: #71808a !important;
+    line-height: 1.6;
+}
+
+.ai-advisory-page .module-icon.purple {
+    background: #e5efee !important;
+    color: #267c78 !important;
+    border: 1px solid #cbdedb !important;
+}
+
+.ai-advisory-page .purple-eyebrow {
+    color: #267c78 !important;
+}
+
+.ai-advisory-page .purple-tag {
+    background: #e5efee !important;
+    color: #267c78 !important;
+    border: 1px solid #cbdedb !important;
+}
+
+.ai-advisory-page .ai-section-intro {
+    margin: 8px 0 22px;
+}
+
+.ai-advisory-page .ai-section-intro h3 {
+    color: #263746;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.ai-advisory-page .ai-section-intro p {
+    color: #71808a;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.ai-advisory-page .field label {
+    color: #40515e !important;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.ai-advisory-page .field input {
+    background: #ffffff !important;
+    color: #263746 !important;
+    border: 1px solid #cfd8de !important;
+    border-radius: 6px !important;
+    min-height: 44px;
+    box-shadow: none !important;
+}
+
+.ai-advisory-page .field input:focus {
+    border-color: #267c78 !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(38,124,120,0.10) !important;
+}
+
+.ai-advisory-page .ai-button {
+    background: #267c78 !important;
+    color: #ffffff !important;
+    border: 1px solid #267c78 !important;
+    border-radius: 6px !important;
+    padding: 12px 22px;
+    font-weight: 600;
+    box-shadow: none !important;
+    transition: background 0.2s ease;
+}
+
+.ai-advisory-page .ai-button:hover {
+    background: #1e6663 !important;
+}
+
+.ai-advisory-page .decision-card {
+    background: #edf4f3 !important;
+    border: 1px solid #cbdedb !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    padding: 22px !important;
+}
+
+.ai-advisory-page .decision-label {
+    color: #267c78 !important;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+}
+
+.ai-advisory-page .decision-card h2 {
+    color: #263746 !important;
+}
+
+.ai-advisory-page .decision-card p {
+    color: #5f707a !important;
+    line-height: 1.6;
+}
+
+.ai-advisory-page .result-item {
+    background: #f7f9fa !important;
+    border: 1px solid #dce2e6 !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+    padding: 18px !important;
+}
+
+.ai-advisory-page .result-item p {
+    color: #71808a !important;
+}
+
+.ai-advisory-page .result-item h3 {
+    color: #263746 !important;
+    font-weight: 700;
+}
+
+.ai-advisory-page .limitations {
+    background: #f7f9fa !important;
+    border: 1px solid #dce2e6 !important;
+    border-radius: 7px !important;
+    padding: 20px !important;
+    margin-top: 18px;
+    box-shadow: none !important;
+}
+
+.ai-advisory-page .limitations h3 {
+    color: #263746 !important;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.ai-advisory-page .limitations li {
+    color: #5f707a !important;
+    line-height: 1.7;
+    margin-bottom: 6px;
+}
+
+.ai-advisory-page .result-divider {
+    border-color: #e1e6e9 !important;
+}
+
+.ai-advisory-page .error-message {
+    color: #b54747 !important;
+}
+
+.ai-advisory-page footer {
+    border-top: 1px solid #dce2e6;
+    color: #7b8992 !important;
+    padding-top: 20px;
+}
+
+.ai-advisory-page .footer-brand {
+    color: #267c78 !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+    .ai-advisory-page .panel {
+        padding: 18px !important;
+    }
+
+    .ai-advisory-page .section-heading {
+        align-items: flex-start;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .ai-advisory-page .welcome-section {
+        gap: 14px;
+    }
+
+    .ai-advisory-page .ai-button {
+        width: 100%;
+    }
+
+}
