@@ -7,11 +7,24 @@
     <title>GridSense | AI Advisory</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+
+<body class="ai-advisory-page">
+
 <div class="app">
+
+    <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="brand"><div class="brand-icon">⚡</div><div><h2>GridSense</h2><p>POWER SYSTEMS ENGINEERING</p></div></div>
+
+        <div class="brand">
+            <div class="brand-icon">⚡</div>
+            <div>
+                <h2>GridSense</h2>
+                <p>POWER SYSTEMS ENGINEERING</p>
+            </div>
+        </div>
+
         <div class="nav-label">MAIN MENU</div>
+
         <nav>
             <a href="index.html"><span>▦</span> Overview</a>
             <a href="engineering.html"><span>⌁</span> Engineering Assessment</a>
@@ -19,175 +32,422 @@
             <a href="pq-screening.html"><span>◉</span> PQ Screening</a>
             <a href="analytics.html"><span>▥</span> Analytics</a>
         </nav>
-        <div class="sidebar-info"><div class="sidebar-info-icon">⌁</div><div><strong>Network Analysis</strong><p>Solar integration and grid performance</p></div></div>
-        <div class="sidebar-bottom"><div class="connection"><span class="status-dot"></span><span id="connectionStatus">Checking...</span></div><strong>GridSense <span>v1.3</span></strong><small>Engineering analysis suite</small></div>
+
+        <div class="sidebar-info">
+            <div class="sidebar-info-icon">✳</div>
+            <div>
+                <strong>AI Intelligence</strong>
+                <p>Machine learning and energy analysis</p>
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="connection">
+                <span class="status-dot"></span>
+                <span id="connectionStatus">Checking...</span>
+            </div>
+            <strong>GridSense <span>v1.3</span></strong>
+            <small>Engineering analysis suite</small>
+        </div>
+
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="main-content">
-        <header class="topbar"><div class="breadcrumb"><a href="index.html">Workspace</a><span>/</span><strong>AI Advisory</strong></div><div class="topbar-right"><div class="system-indicator"><span class="status-dot"></span> AI MODULE</div><div class="profile-icon">GS</div></div></header>
 
-        <section class="welcome-section"><div><p class="eyebrow">MODEL-BASED ENGINEERING ANALYSIS</p><h1>AI Hosting Capacity Advisory</h1><p class="welcome-description">Estimate additional hosting capacity and screen configured engineering constraints using trained machine-learning models.</p></div><div class="welcome-badge">✳ Random Forest Models</div></section>
+        <!-- TOP BAR -->
+        <header class="topbar">
 
-        <section class="panel module-panel">
-            <div class="section-heading"><div class="module-heading"><div class="module-icon purple">✳</div><div><p class="eyebrow purple-eyebrow">MODEL INPUTS</p><h2>Feeder Parameters</h2><p class="module-description">Provide the network and solar connection details.</p></div></div><span class="tag purple-tag">RANDOM FOREST</span></div>
-
-            <form id="aiForm">
-                <div class="form-grid">
-                    <div class="field"><label for="aiFeeder">Feeder ID</label><input type="text" id="aiFeeder" value="SIM011" required></div>
-                    <div class="field"><label for="peakLoad">Peak Load (kW)</label><input type="number" id="peakLoad" min="0.1" step="any" value="300" required></div>
-                    <div class="field"><label for="aiLineLength">Line Length (km)</label><input type="number" id="aiLineLength" min="0.001" step="any" value="0.5" required></div>
-                    <div class="field"><label for="existingSolarInput">Existing Solar (kW)</label><input type="number" id="existingSolarInput" min="0" step="any" value="200" required></div>
-                    <div class="field"><label for="aiRequestedSolar">Requested Solar (kW)</label><input type="number" id="aiRequestedSolar" min="0.1" step="any" value="100" required></div>
-                </div>
-                <button type="submit" class="ai-button">Generate model estimate →</button>
-                <p id="aiError" class="error-message"></p>
-            </form>
-
-            <div id="aiResult" class="hidden">
-                <div class="result-divider"></div>
-                <div class="decision-card ai-decision-card"><span class="decision-label">AI MODEL RESULT</span><h2 id="aiStatus">-</h2><p id="aiMessage">-</p></div>
-                <div class="result-grid">
-                    <div class="result-item"><p>Estimated Hosting Capacity</p><h3 id="predictedCapacity">-</h3></div>
-                    <div class="result-item"><p>Constraint Classification</p><h3 id="constraintClass">-</h3></div>
-                    <div class="result-item"><p>Class 1 Model Score</p><h3 id="constraintScore">-</h3></div>
-                    <div class="result-item"><p>Proposed Total Solar</p><h3 id="aiTotalSolar">-</h3></div>
-                </div>
-                <div class="limitations"><h3>Model Limitations</h3><ul id="aiLimitations"></ul></div>
+            <div class="breadcrumb">
+                <a href="index.html">Workspace</a>
+                <span>/</span>
+                <strong>AI Advisory</strong>
             </div>
-        </section>
 
-<!-- =========================================
-     AI ENERGY ADVISOR
-========================================= -->
+            <div class="topbar-right">
+                <div class="system-indicator">
+                    <span class="status-dot"></span>
+                    AI MODULE
+                </div>
+                <div class="profile-icon">GS</div>
+            </div>
 
-<section class="panel module-panel energy-advisor-panel">
+        </header>
 
-    <div class="section-heading">
-        <div class="module-heading">
-            <div class="module-icon purple">⚡</div>
+        <!-- PAGE INTRODUCTION -->
+        <section class="welcome-section">
+
             <div>
-                <p class="eyebrow purple-eyebrow">WEATHER-AWARE ENERGY INTELLIGENCE</p>
-                <h2>AI Energy Advisor</h2>
-                <p class="module-description">
-                    Get solar generation estimates and energy-saving
-                    recommendations using current weather conditions.
+                <p class="eyebrow">INTELLIGENT POWER SYSTEM ANALYSIS</p>
+
+                <h1>AI Advisory Centre</h1>
+
+                <p class="welcome-description">
+                    Evaluate distributed solar hosting capacity, examine
+                    network constraints and generate weather-aware
+                    energy recommendations using computational models.
                 </p>
             </div>
-        </div>
-        <span class="tag purple-tag">ENERGY ADVISOR</span>
-    </div>
 
-    <!-- INPUTS -->
-    <form id="energyAdvisorForm">
-
-        <div class="form-grid">
-
-            <div class="field">
-                <label for="advisorCapacity">Solar Capacity (kW)</label>
-                <input
-                    type="number"
-                    id="advisorCapacity"
-                    min="0.1"
-                    max="1000"
-                    step="any"
-                    value="10"
-                    required
-                >
+            <div class="welcome-badge">
+                ✳ MODEL-BASED ANALYSIS
             </div>
 
-            <div class="field">
-                <label for="advisorTariff">Electricity Tariff (₹/kWh)</label>
-                <input
-                    type="number"
-                    id="advisorTariff"
-                    min="0"
-                    max="100"
-                    step="any"
-                    value="8"
-                    required
-                >
+        </section>
+
+        <!-- SECTION 1: HOSTING CAPACITY -->
+        <section class="panel module-panel ai-main-panel">
+
+            <div class="section-heading">
+
+                <div class="module-heading">
+
+                    <div class="module-icon purple">✳</div>
+
+                    <div>
+                        <p class="eyebrow purple-eyebrow">
+                            MACHINE LEARNING MODULE
+                        </p>
+
+                        <h2>AI Hosting Capacity Advisory</h2>
+
+                        <p class="module-description">
+                            Estimate additional solar hosting capacity
+                            and classify potential feeder constraints.
+                        </p>
+                    </div>
+
+                </div>
+
+                <span class="tag purple-tag">RANDOM FOREST</span>
+
             </div>
 
-        </div>
+            <div class="ai-section-intro">
+                <h3>Feeder Parameters</h3>
+                <p>
+                    Enter the electrical network characteristics
+                    and proposed solar installation details.
+                </p>
+            </div>
 
-        <button type="submit" class="ai-button">
-            Generate Energy Advice →
-        </button>
+            <form id="aiForm">
 
-        <p id="energyAdvisorError" class="error-message"></p>
+                <div class="form-grid">
 
-    </form>
+                    <div class="field">
+                        <label for="aiFeeder">Feeder ID</label>
+                        <input
+                            type="text"
+                            id="aiFeeder"
+                            value="SIM011"
+                            required
+                        >
+                    </div>
 
-    <!-- RESULTS -->
-    <div id="energyAdvisorResult" class="hidden">
+                    <div class="field">
+                        <label for="peakLoad">Peak Load (kW)</label>
+                        <input
+                            type="number"
+                            id="peakLoad"
+                            min="0.1"
+                            step="any"
+                            value="300"
+                            required
+                        >
+                    </div>
 
-        <div class="result-divider"></div>
+                    <div class="field">
+                        <label for="aiLineLength">Line Length (km)</label>
+                        <input
+                            type="number"
+                            id="aiLineLength"
+                            min="0.001"
+                            step="any"
+                            value="0.5"
+                            required
+                        >
+                    </div>
 
-        <div class="decision-card ai-decision-card">
-            <span class="decision-label">ENERGY ADVISOR RESULT</span>
-            <h2 id="energyAdvisorTitle">Recommendations Generated</h2>
-            <p id="energyAdvisorSummary">
-                Your energy analysis is ready.
+                    <div class="field">
+                        <label for="existingSolarInput">
+                            Existing Solar (kW)
+                        </label>
+                        <input
+                            type="number"
+                            id="existingSolarInput"
+                            min="0"
+                            step="any"
+                            value="200"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="aiRequestedSolar">
+                            Requested Solar (kW)
+                        </label>
+                        <input
+                            type="number"
+                            id="aiRequestedSolar"
+                            min="0.1"
+                            step="any"
+                            value="100"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" class="ai-button">
+                    Generate Model Estimate →
+                </button>
+
+                <p id="aiError" class="error-message"></p>
+
+            </form>
+
+            <!-- HOSTING CAPACITY RESULTS -->
+            <div id="aiResult" class="hidden">
+
+                <div class="result-divider"></div>
+
+                <div class="decision-card ai-decision-card">
+
+                    <span class="decision-label">
+                        AI MODEL RESULT
+                    </span>
+
+                    <h2 id="aiStatus">-</h2>
+
+                    <p id="aiMessage">-</p>
+
+                </div>
+
+                <div class="result-grid">
+
+                    <div class="result-item">
+                        <p>Estimated Hosting Capacity</p>
+                        <h3 id="predictedCapacity">-</h3>
+                    </div>
+
+                    <div class="result-item">
+                        <p>Constraint Classification</p>
+                        <h3 id="constraintClass">-</h3>
+                    </div>
+
+                    <div class="result-item">
+                        <p>Class 1 Model Score</p>
+                        <h3 id="constraintScore">-</h3>
+                    </div>
+
+                    <div class="result-item">
+                        <p>Proposed Total Solar</p>
+                        <h3 id="aiTotalSolar">-</h3>
+                    </div>
+
+                </div>
+
+                <div class="limitations">
+                    <h3>Model Limitations</h3>
+                    <ul id="aiLimitations"></ul>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SECTION 2: ENERGY ADVISOR -->
+        <section class="panel module-panel energy-advisor-panel">
+
+            <div class="section-heading">
+
+                <div class="module-heading">
+
+                    <div class="module-icon purple">⚡</div>
+
+                    <div>
+                        <p class="eyebrow purple-eyebrow">
+                            WEATHER-AWARE ENERGY INTELLIGENCE
+                        </p>
+
+                        <h2>AI Energy Advisor</h2>
+
+                        <p class="module-description">
+                            Estimate solar generation and evaluate
+                            energy savings using weather conditions
+                            and system parameters.
+                        </p>
+                    </div>
+
+                </div>
+
+                <span class="tag purple-tag">ENERGY ANALYSIS</span>
+
+            </div>
+
+            <div class="ai-section-intro">
+                <h3>Energy System Parameters</h3>
+                <p>
+                    Specify the installed solar capacity and
+                    applicable electricity tariff.
+                </p>
+            </div>
+
+            <form id="energyAdvisorForm">
+
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="advisorCapacity">
+                            Solar Capacity (kW)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="advisorCapacity"
+                            min="0.1"
+                            max="1000"
+                            step="any"
+                            value="10"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="advisorTariff">
+                            Electricity Tariff (₹/kWh)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="advisorTariff"
+                            min="0"
+                            max="100"
+                            step="any"
+                            value="8"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" class="ai-button">
+                    Generate Energy Advice →
+                </button>
+
+                <p id="energyAdvisorError" class="error-message"></p>
+
+            </form>
+
+            <!-- ENERGY ADVISOR RESULTS -->
+            <div id="energyAdvisorResult" class="hidden">
+
+                <div class="result-divider"></div>
+
+                <div class="decision-card ai-decision-card">
+
+                    <span class="decision-label">
+                        ENERGY ADVISOR RESULT
+                    </span>
+
+                    <h2 id="energyAdvisorTitle">
+                        Recommendations Generated
+                    </h2>
+
+                    <p id="energyAdvisorSummary">
+                        Your energy analysis is ready.
+                    </p>
+
+                </div>
+
+                <!-- SUMMARY -->
+                <div class="result-grid">
+
+                    <div class="result-item">
+                        <p>Estimated Daily Generation</p>
+                        <h3 id="advisorDailyEnergy">-</h3>
+                    </div>
+
+                    <div class="result-item">
+                        <p>Estimated Daily Energy Value</p>
+                        <h3 id="advisorEnergyValue">-</h3>
+                    </div>
+
+                    <div class="result-item">
+                        <p>Solar Capacity</p>
+                        <h3 id="advisorCapacityResult">-</h3>
+                    </div>
+
+                    <div class="result-item">
+                        <p>Electricity Tariff</p>
+                        <h3 id="advisorTariffResult">-</h3>
+                    </div>
+
+                </div>
+
+                <!-- WEATHER -->
+                <div class="limitations">
+
+                    <h3>Weather Observations</h3>
+
+                    <ul id="advisorWeatherObservations"></ul>
+
+                </div>
+
+                <!-- RECOMMENDATIONS -->
+                <div class="limitations">
+
+                    <h3>Energy Recommendations</h3>
+
+                    <ul id="advisorRecommendations"></ul>
+
+                </div>
+
+                <!-- COMPARISON -->
+                <div class="limitations">
+
+                    <h3>Solar Capacity Comparison</h3>
+
+                    <div id="advisorCapacityComparison"></div>
+
+                </div>
+
+                <!-- LIMITATIONS -->
+                <div class="limitations">
+
+                    <h3>Model Limitations</h3>
+
+                    <ul id="advisorLimitations"></ul>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+
+            <div class="footer-brand">⚡ GridSense</div>
+
+            <p>
+                AI-generated estimates are intended for preliminary
+                engineering analysis and decision support.
             </p>
-        </div>
 
-        <!-- SUMMARY CARDS -->
-        <div class="result-grid">
+            <p>
+                Results should be validated against actual network
+                measurements and engineering standards.
+            </p>
 
-            <div class="result-item">
-                <p>Estimated Daily Generation</p>
-                <h3 id="advisorDailyEnergy">-</h3>
-            </div>
+        </footer>
 
-            <div class="result-item">
-                <p>Estimated Daily Energy Value</p>
-                <h3 id="advisorEnergyValue">-</h3>
-            </div>
-
-            <div class="result-item">
-                <p>Solar Capacity</p>
-                <h3 id="advisorCapacityResult">-</h3>
-            </div>
-
-            <div class="result-item">
-                <p>Electricity Tariff</p>
-                <h3 id="advisorTariffResult">-</h3>
-            </div>
-
-        </div>
-
-        <!-- WEATHER OBSERVATIONS -->
-        <div class="limitations">
-            <h3>Weather Observations</h3>
-            <ul id="advisorWeatherObservations"></ul>
-        </div>
-
-        <!-- RECOMMENDATIONS -->
-        <div class="limitations">
-            <h3>Energy Recommendations</h3>
-            <ul id="advisorRecommendations"></ul>
-        </div>
-
-        <!-- CAPACITY COMPARISON -->
-        <div class="limitations">
-            <h3>Solar Capacity Comparison</h3>
-            <div id="advisorCapacityComparison"></div>
-        </div>
-
-        <!-- LIMITATIONS -->
-        <div class="limitations">
-            <h3>Model Limitations</h3>
-            <ul id="advisorLimitations"></ul>
-        </div>
-
-    </div>
-
-</section>
-
-
-        <footer><div class="footer-brand">⚡ GridSense</div><p>Model estimates are intended for preliminary engineering screening.</p><p>They are not connection approvals or calibrated real-world probabilities.</p></footer>
     </main>
+
 </div>
+
 <script src="script.js"></script>
+
 </body>
 </html>
