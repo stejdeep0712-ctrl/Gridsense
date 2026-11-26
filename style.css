@@ -2992,3 +2992,342 @@ footer {
         box-shadow: none !important;
     }
 }
+
+/* =====================================================
+   GRIDSENSE — ENGINEERING ASSESSMENT
+   Professional distribution engineering interface
+===================================================== */
+
+.engineering-page {
+    --eng-navy: #263746;
+    --eng-teal: #267c78;
+    --eng-text: #263746;
+    --eng-muted: #71808b;
+    --eng-border: #dce2e6;
+    --eng-background: #f2f4f5;
+    --eng-white: #ffffff;
+}
+
+/* Page background */
+
+.engineering-page,
+.engineering-page .app,
+.engineering-page .main-content {
+    background: var(--eng-background) !important;
+    color: var(--eng-text) !important;
+}
+
+/* Sidebar */
+
+.engineering-page .sidebar {
+    background: var(--eng-navy) !important;
+    border-right: 1px solid #344957 !important;
+    box-shadow: none !important;
+}
+
+.engineering-page .brand-icon {
+    background: var(--eng-teal) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+}
+
+.engineering-page .sidebar nav a {
+    border-radius: 6px !important;
+}
+
+.engineering-page .sidebar nav a.active {
+    background: #354e5b !important;
+    border: 1px solid #48616c !important;
+    box-shadow: inset 3px 0 #58aaa0 !important;
+}
+
+/* Top navigation */
+
+.engineering-page .topbar {
+    border-bottom: 1px solid var(--eng-border) !important;
+}
+
+.engineering-page .breadcrumb strong {
+    color: var(--eng-navy) !important;
+}
+
+/* Page heading */
+
+.engineering-page .welcome-section {
+    align-items: center !important;
+    margin-bottom: 28px !important;
+}
+
+.engineering-page .welcome-section h1 {
+    color: var(--eng-navy) !important;
+    font-size: clamp(29px, 3vw, 38px) !important;
+    font-weight: 650 !important;
+    letter-spacing: -0.8px !important;
+}
+
+.engineering-page .welcome-description {
+    color: var(--eng-muted) !important;
+    font-size: 13px !important;
+}
+
+.engineering-page .eyebrow {
+    color: var(--eng-teal) !important;
+    letter-spacing: 1.2px !important;
+}
+
+/* Engineering badge */
+
+.engineering-page .welcome-badge {
+    background: #e5f0ee !important;
+    border: 1px solid #d0e3df !important;
+    color: #267c78 !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+/* Main assessment panel */
+
+.engineering-page .engineering-form-panel {
+    background: var(--eng-white) !important;
+    border: 1px solid var(--eng-border) !important;
+    border-radius: 9px !important;
+    padding: 30px !important;
+    box-shadow: 0 2px 8px rgba(30, 45, 55, 0.04) !important;
+}
+
+.engineering-page .section-heading {
+    padding-bottom: 20px !important;
+    border-bottom: 1px solid #edf0f2 !important;
+}
+
+.engineering-page .module-heading h2 {
+    color: var(--eng-navy) !important;
+    font-size: 19px !important;
+    font-weight: 650 !important;
+}
+
+.engineering-page .module-description {
+    color: var(--eng-muted) !important;
+}
+
+.engineering-page .module-icon {
+    border-radius: 7px !important;
+    background: #e5f0ee !important;
+    color: var(--eng-teal) !important;
+}
+
+/* Instructions */
+
+.engineering-page .engineering-instruction {
+    margin: 22px 0 25px;
+    padding: 15px 17px;
+    background: #f5f7f7;
+    border-left: 3px solid var(--eng-teal);
+}
+
+.engineering-page .engineering-instruction strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--eng-navy);
+    font-size: 12px;
+}
+
+.engineering-page .engineering-instruction p {
+    margin: 0;
+    color: var(--eng-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* Form */
+
+.engineering-page .form-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px !important;
+    margin: 0 0 22px !important;
+}
+
+.engineering-page .field label {
+    color: #435461 !important;
+    font-size: 12px !important;
+    font-weight: 650 !important;
+}
+
+.engineering-page .field input {
+    min-height: 48px !important;
+    background: #ffffff !important;
+    border: 1px solid #cbd4da !important;
+    border-radius: 6px !important;
+    color: var(--eng-navy) !important;
+    box-shadow: none !important;
+}
+
+.engineering-page .field input:focus {
+    border-color: var(--eng-teal) !important;
+    box-shadow: 0 0 0 2px rgba(38,124,120,.10) !important;
+}
+
+/* Submit action */
+
+.engineering-page .engineering-form-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.engineering-page .engineering-form-actions button {
+    min-height: 45px !important;
+    padding: 0 22px !important;
+    background: var(--eng-teal) !important;
+    border: 1px solid var(--eng-teal) !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    font-size: 12px !important;
+    font-weight: 650 !important;
+}
+
+.engineering-page .engineering-form-actions button:hover {
+    background: #206963 !important;
+    transform: none !important;
+}
+
+.engineering-page .engineering-form-actions span {
+    color: #87939b;
+    font-size: 10px;
+}
+
+.engineering-page .tag {
+    background: #e5f0ee !important;
+    color: var(--eng-teal) !important;
+    border: 1px solid #d0e3df !important;
+    border-radius: 4px !important;
+}
+
+/* Assessment output */
+
+.engineering-page .result-section-heading {
+    margin-bottom: 17px;
+}
+
+.engineering-page .result-section-heading h2 {
+    margin: 0;
+    color: var(--eng-navy);
+    font-size: 19px;
+    font-weight: 650;
+}
+
+.engineering-page .decision-card {
+    background: #edf4f3 !important;
+    border: 1px solid #d5e5e2 !important;
+    border-left: 4px solid var(--eng-teal) !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+.engineering-page .decision-label {
+    color: var(--eng-teal) !important;
+    letter-spacing: 1.2px !important;
+}
+
+.engineering-page .decision-card h2 {
+    color: var(--eng-navy) !important;
+}
+
+.engineering-page .decision-card p {
+    color: #657780 !important;
+    line-height: 1.7 !important;
+}
+
+/* Result metrics */
+
+.engineering-page .result-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    margin: 18px 0 !important;
+}
+
+.engineering-page .result-item {
+    background: #ffffff !important;
+    border: 1px solid var(--eng-border) !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+.engineering-page .result-item p {
+    color: #71808b !important;
+    font-size: 10px !important;
+}
+
+.engineering-page .result-item h3 {
+    color: var(--eng-teal) !important;
+    font-size: 21px !important;
+    font-weight: 650 !important;
+}
+
+/* Limiting factor */
+
+.engineering-page .limiting-factor {
+    background: #f5f7f7 !important;
+    border: 1px solid var(--eng-border) !important;
+    border-radius: 6px !important;
+}
+
+.engineering-page .limiting-factor span {
+    color: var(--eng-muted) !important;
+}
+
+.engineering-page .limiting-factor strong {
+    color: var(--eng-navy) !important;
+}
+
+/* Footer */
+
+.engineering-page footer {
+    border-top: 1px solid var(--eng-border) !important;
+    color: var(--eng-muted) !important;
+}
+
+.engineering-page footer .footer-brand {
+    color: var(--eng-navy) !important;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .engineering-page .result-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 760px) {
+    .engineering-page .welcome-section {
+        align-items: flex-start !important;
+        flex-direction: column !important;
+    }
+
+    .engineering-page .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .engineering-page .engineering-form-panel {
+        padding: 21px !important;
+    }
+}
+
+@media (max-width: 430px) {
+    .engineering-page .result-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .engineering-page .section-heading {
+        align-items: flex-start !important;
+    }
+
+    .engineering-page .engineering-form-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
