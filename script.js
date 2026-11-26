@@ -2120,35 +2120,3 @@ if (chatForm && chatMessages && chatInput) {
     }
 }
 
-/* ==========================================
-   GRIDSENSE AUTOMATIC COLOUR ROTATION
-   Changes theme every 10 seconds
-========================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const themes = [
-        "theme-orange",
-        "theme-blue",
-        "theme-purple",
-        "theme-green",
-        "theme-pink"
-    ];
-
-    let currentTheme = 0;
-
-    function changeTheme() {
-        document.body.classList.remove(...themes);
-
-        document.body.classList.add(
-            themes[currentTheme]
-        );
-
-        currentTheme = (currentTheme + 1) % themes.length;
-    }
-
-    changeTheme();
-
-    setInterval(changeTheme, 90000);
-
-});
